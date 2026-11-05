@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ordens de Serviço</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f6feb">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #667085;
+    --line: #d9dde5; --accent: #1f6feb; --accent-text: #fff;
+    --ok: #1a7f37; --warn: #b54708; --danger: #c62828;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12151b; --card: #1b1f27; --text: #e6e8ec; --muted: #9aa3b2;
+      --line: #2e3440; --accent: #4c8dff; --accent-text: #fff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text); }
+  header { display: flex; gap: 12px; align-items: center; justify-content: space-between;
+    padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; }
+  main { max-width: 980px; margin: 0 auto; padding: 16px; }
+  button, .btn { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--text);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  button.danger { color: var(--danger); }
+  button:hover { filter: brightness(0.96); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  input, textarea, select { width: 100%; font: inherit; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--bg); color: var(--text); }
+  textarea { min-height: 80px; resize: vertical; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .full { grid-column: 1 / -1; }
+  .os-num { font-size: 26px; font-weight: 800; letter-spacing: 1px; color: var(--accent); }
+  .list-item { display: flex; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .list-item:hover { background: var(--bg); }
+  .list-item img, .thumb-empty { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; flex: none; background: var(--bg); border: 1px solid var(--line); }
+  .thumb-empty { display: grid; place-items: center; color: var(--muted); font-size: 11px; }
+  .li-main { flex: 1; min-width: 0; }
+  .li-main b { display: block; }
+  .li-main small { color: var(--muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+  .st-Aberta { color: var(--warn); } .st-Concluída { color: var(--ok); } .st-Entregue { color: var(--muted); }
+  .photos { display: flex; gap: 10px; flex-wrap: wrap; }
+  .photo { position: relative; }
+  .photo img { width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; }
+  .photo button { position: absolute; top: 4px; right: 4px; padding: 0 7px; background: rgba(0,0,0,.6); color: #fff; border: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 12px; color: var(--muted); }
+  td input { padding: 6px 8px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 10px; }
+  .hidden { display: none !important; }
+  #viewer { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: grid; place-items: center; z-index: 20; cursor: zoom-out; }
+  #viewer img { max-width: 95vw; max-height: 95vh; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #222; color: #fff;
+    padding: 10px 18px; border-radius: 8px; z-index: 30; }
+
+  /* Área de impressão */
+  #print-area { display: none; }
+  @media print {
+    body { background: #fff; color: #000; }
+    header, main, #viewer, .toast { display: none !important; }
+    #print-area { display: block; }
+    @page { margin: 8mm; }
+  }
+  .label { width: 60mm; border: 1px dashed #000; padding: 3mm; font-family: Arial, sans-serif; color: #000; text-align: center; }
+  .label .t { font-size: 9pt; font-weight: bold; text-transform: uppercase; }
+  .label .n { font-size: 16pt; font-weight: 900; margin: 1mm 0; }
+  .label .d { font-size: 8pt; }
+  .label svg { width: 100%; height: 12mm; }
+  .print-os { font-family: Arial, sans-serif; color: #000; font-size: 11pt; }
+  .print-os h2 { margin: 0 0 4mm; }
+  .print-os table td, .print-os table th { border: 1px solid #999; padding: 4px 6px; }
+  .print-os .ph { display: flex; gap: 4mm; flex-wrap: wrap; margin-top: 4mm; }
+  .print-os .ph img { width: 55mm; height: 55mm; object-fit: cover; border: 1px solid #999; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔧 Ordens de Serviço</h1>
+  <div class="row">
+    <button class="primary" id="btn-new">+ Nova OS</button>
+    <button id="btn-sync" title="Sincronizar com o Google Drive">☁️ Conectar Drive</button>
+    <button id="btn-config" title="Configurações">⚙️</button>
+    <button id="btn-export" title="Salvar backup de todas as OS em arquivo">Backup</button>
+    <button id="btn-import" title="Restaurar backup">Restaurar</button>
+    <input type="file" id="import-file" accept=".json" class="hidden">
+  </div>
+</header>
+
+<main>
+  <!-- LISTA -->
+  <section id="view-list">
+    <div class="card">
+      <div class="row">
+        <input id="search" placeholder="Buscar por nº OS, nome da placa, código, defeito, componente…" style="flex:1;min-width:200px">
+        <select id="filter-status" style="width:auto">
+          <option value="">Todos os status</option>
+          <option>Aberta</option><option>Concluída</option><option>Entregue</option>
+        </select>
+      </div>
+    </div>
+    <div class="card" style="padding:0" id="list"></div>
+  </section>
+
+  <!-- CONFIGURAÇÕES -->
+  <section id="view-config" class="hidden">
+    <div class="card">
+      <h2 style="margin-top:0">Google Drive</h2>
+      <p style="color:var(--muted)">As OS ficam salvas no aparelho e são copiadas para a pasta
+        <b>Ordens de Serviço</b> no seu Google Drive. Assim o celular Android e o computador
+        enxergam as mesmas OS. Veja o passo a passo no arquivo <b>LEIA-ME.md</b>.</p>
+      <label for="cfg-client">Client ID do Google (OAuth)</label>
+      <input id="cfg-client" placeholder="123456789-xxxx.apps.googleusercontent.com">
+      <div class="row" style="margin-top:12px">
+        <button class="primary" id="cfg-save">Salvar</button>
+        <button id="cfg-back">← Voltar</button>
+      </div>
+      <p id="cfg-status" style="color:var(--muted);margin-bottom:0"></p>
+    </div>
+  </section>
+
+  <!-- FORMULÁRIO -->
+  <section id="view-form" class="hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <label>Número da OS</label>
+          <div class="os-num" id="f-num">—</div>
+        </div>
+        <div class="row">
+          <button id="btn-back">← Voltar</button>
+          <button id="btn-label">🏷️ Etiqueta de garantia</button>
+          <button id="btn-print">🖨️ Imprimir OS</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Fotos da placa</label>
+      <div class="photos" id="photos"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="btn-camera">📷 Tirar foto</button>
+        <button id="btn-gallery">🖼️ Escolher arquivo</button>
+        <input type="file" id="in-camera" accept="image/*" capture="environment" class="hidden">
+        <input type="file" id="in-gallery" accept="image/*" multiple class="hidden">
+      </div>
+    </div>
+
+    <div class="card grid">
+      <div><label for="f-nome">Nome da placa *</label><input id="f-nome" placeholder="Ex.: Placa principal TV Samsung"></div>
+      <div><label for="f-codigo">Código do fabricante</label><input id="f-codigo" placeholder="Ex.: BN41-02568A"></div>
+      <div><label for="f-cliente">Cliente</label><input id="f-cliente" placeholder="Nome / telefone (opcional)"></div>
+      <div><label for="f-entrada">Data de entrada</label><input id="f-entrada" type="date"></div>
+      <div><label for="f-saida">Data de saída</label><input id="f-saida" type="date"></div>
+      <div><label for="f-garantia">Garantia (dias)</label><input id="f-garantia" type="number" min="0" value="90"></div>
+      <div><label for="f-status">Status</label>
+        <select id="f-status"><option>Aberta</option><option>Concluída</option><option>Entregue</option></select></div>
+      <div><label for="f-valor">Valor (R$)</label><input id="f-valor" type="number" min="0" step="0.01" placeholder="0,00"></div>
+      <div class="full"><label for="f-defeito">Defeito</label><textarea id="f-defeito" placeholder="Defeito relatado / encontrado"></textarea></div>
+      <div class="full"><label for="f-solucao">Solução</label><textarea id="f-solucao" placeholder="O que foi feito"></textarea></div>
+    </div>
+
+    <div class="card">
+      <label>Componentes utilizados</label>
+      <table>
+        <thead><tr><th>Componente</th><th>Código / valor</th><th style="width:80px">Qtd</th><th style="width:40px"></th></tr></thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+      <button id="btn-add-comp" style="margin-top:10px">+ Adicionar componente</button>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-bottom:40px">
+      <button class="danger" id="btn-delete">Excluir OS</button>
+      <button class="primary" id="btn-save">💾 Salvar OS</button>
+    </div>
+  </section>
+</main>
+
+<div id="viewer" class="hidden"><img alt=""></div>
+<div id="print-area"></div>
+
+<script>
+// ---------- Banco de dados local (IndexedDB) ----------
+const DB_NAME = 'ordens_servico', DB_VER = 1;
+let db;
+function openDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, DB_VER);
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      d.createObjectStore('os', { keyPath: 'id' });
+      d.createObjectStore('meta');
+    };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+function tx(store, mode, fn) {
+  return new Promise((res, rej) => {
+    const t = db.transaction(store, mode);
+    const s = t.objectStore(store);
+    let out;
+    Promise.resolve(fn(s)).then(v => out = v);
+    t.oncomplete = () => res(out);
+    t.onerror = () => rej(t.error);
+  });
+}
+const req = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+const getAll = () => tx('os', 'readonly', s => req(s.getAll()));
+const putOS = o => tx('os', 'readwrite', s => s.put(o));
+const delOS = id => tx('os', 'readwrite', s => s.delete(id));
+
+const getMeta = k => tx('meta', 'readonly', s => req(s.get(k)));
+const setMeta = (k, v) => tx('meta', 'readwrite', s => s.put(v, k));
+
+// Número sequencial por ano: OS-2026-0001
+// Usa o maior número já existente (inclusive os vindos do Drive) para não repetir entre aparelhos.
+async function nextNumber() {
+  const year = new Date().getFullYear();
+  const key = 'seq-' + year, prefix = `OS-${year}-`;
+  let n = (await getMeta(key)) || 0;
+  for (const o of await getAll())
+    if (o.numero?.startsWith(prefix)) n = Math.max(n, parseInt(o.numero.slice(prefix.length), 10) || 0);
+  n++;
+  await setMeta(key, n);
+  return prefix + String(n).padStart(4, '0');
+}
+
+// ---------- Utilidades ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const today = () => new Date().toISOString().slice(0, 10);
+const fmtDate = d => d ? d.split('-').reverse().join('/') : '—';
+function addDays(d, n) {
+  const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + Number(n || 0));
+  return x.toISOString().slice(0, 10);
+}
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+}
+// Reduz a foto para no máx. 1600px (economiza espaço)
+function compressImage(file) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 1600, k = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      res(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+// Código de barras Code 39 em SVG (funciona offline)
+const C39 = {'0':'nnnwwnwnn','1':'wnnwnnnnw','2':'nnwwnnnnw','3':'wnwwnnnnn','4':'nnnwwnnnw','5':'wnnwwnnnn','6':'nnwwwnnnn','7':'nnnwnnwnw','8':'wnnwnnwnn','9':'nnwwnnwnn',
+'A':'wnnnnwnnw','B':'nnwnnwnnw','C':'wnwnnwnnn','D':'nnnnwwnnw','E':'wnnnwwnnn','F':'nnwnwwnnn','G':'nnnnnwwnw','H':'wnnnnwwnn','I':'nnwnnwwnn','J':'nnnnwwwnn',
+'K':'wnnnnnnww','L':'nnwnnnnww','M':'wnwnnnnwn','N':'nnnnwnnww','O':'wnnnwnnwn','P':'nnwnwnnwn','Q':'nnnnnnwww','R':'wnnnnnwwn','S':'nnwnnnwwn','T':'nnnnwnwwn',
+'U':'wwnnnnnnw','V':'nwwnnnnnw','W':'wwwnnnnnn','X':'nwnnwnnnw','Y':'wwnnwnnnn','Z':'nwwnwnnnn','-':'nwnnnnwnw','.':'wwnnnnwnn',' ':'nwwnnnwnn','*':'nwnnwnwnn'};
+function barcodeSVG(text) {
+  const s = '*' + text.toUpperCase() + '*';
+  let x = 0, bars = '';
+  for (const ch of s) {
+    const p = C39[ch] || C39['-'];
+    for (let i = 0; i < 9; i++) {
+      const w = p[i] === 'w' ? 3 : 1;
+      if (i % 2 === 0) bars += `<rect x="${x}" y="0" width="${w}" height="40"/>`;
+      x += w;
+    }
+    x += 1;
+  }
+  return `<svg viewBox="0 0 ${x} 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">${bars}</svg>`;
+}
+
+// ---------- Estado ----------
+let current = null; // OS em edição
+
+// ---------- Lista ----------
+async function renderList() {
+  const q = $('search').value.trim().toLowerCase();
+  const st = $('filter-status').value;
+  let all = (await getAll()).filter(o => !o.deleted).sort((a, b) => b.createdAt - a.createdAt);
+  if (st) all = all.filter(o => o.status === st);
+  if (q) all = all.filter(o => [o.numero, o.nome, o.codigo, o.cliente, o.defeito, o.solucao,
+    ...(o.componentes || []).map(c => c.nome + ' ' + c.codigo)].join(' ').toLowerCase().includes(q));
+  const el = $('list');
+  if (!all.length) { el.innerHTML = `<div class="empty">Nenhuma OS encontrada.<br>Clique em <b>+ Nova OS</b> para começar.</div>`; return; }
+  el.innerHTML = all.map(o => `
+    <div class="list-item" data-id="${o.id}">
+      ${o.fotos?.length ? `<img src="${o.fotos[0]}" alt="">` : `<div class="thumb-empty">sem foto</div>`}
+      <div class="li-main">
+        <b>${esc(o.numero)} · ${esc(o.nome || '(sem nome)')}</b>
+        <small>${esc(o.codigo || '—')} · Entrada ${fmtDate(o.entrada)}${o.cliente ? ' · ' + esc(o.cliente) : ''}</small>
+        <small>${esc(o.defeito || '')}</small>
+      </div>
+      <span class="badge st-${esc(o.status)}">${esc(o.status)}</span>
+    </div>`).join('');
+}
+$('list').addEventListener('click', async e => {
+  const it = e.target.closest('.list-item'); if (!it) return;
+  const o = (await getAll()).find(x => x.id === it.dataset.id);
+  openForm(o);
+});
+$('search').addEventListener('input', renderList);
+$('filter-status').addEventListener('change', renderList);
+
+// ---------- Formulário ----------
+function show(view) {
+  for (const v of ['list', 'form', 'config']) $('view-' + v).classList.toggle('hidden', view !== v);
+  window.scrollTo(0, 0);
+}
+function openForm(o) {
+  current = o ? structuredClone(o) : {
+    id: crypto.randomUUID(), numero: null, fotos: [], nome: '', codigo: '', cliente: '',
+    entrada: today(), saida: '', garantia: 90, status: 'Aberta', valor: '',
+    defeito: '', solucao: '', componentes: [], createdAt: Date.now()
+  };
+  $('f-num').textContent = current.numero || '(gerado ao salvar)';
+  for (const k of ['nome','codigo','cliente','entrada','saida','garantia','status','valor','defeito','solucao'])
+    $('f-' + k).value = current[k] ?? '';
+  $('btn-delete').classList.toggle('hidden', !current.numero);
+  renderPhotos(); renderComps(); show('form');
+}
+function readForm() {
+  for (const k of ['nome','codigo','cliente','entrada','saida','garantia','status','valor','defeito','solucao'])
+    current[k] = $('f-' + k).value.trim();
+  current.componentes = [...$('comp-body').querySelectorAll('tr')].map(tr => ({
+    nome: tr.querySelector('.c-nome').value.trim(),
+    codigo: tr.querySelector('.c-cod').value.trim(),
+    qtd: tr.querySelector('.c-qtd').value.trim()
+  })).filter(c => c.nome || c.codigo);
+}
+async function save() {
+  readForm();
+  if (!current.nome) { toast('Informe o nome da placa'); $('f-nome').focus(); return false; }
+  if (!current.numero) {
+    // Puxa o Drive antes de numerar, para não repetir número de outro aparelho
+    if (drive.connected()) await drive.sync(true).catch(() => {});
+    current.numero = await nextNumber();
+  }
+  if (current.status !== 'Aberta' && !current.saida) { current.saida = today(); $('f-saida').value = current.saida; }
+  current.updatedAt = Date.now();
+  await putOS(current);
+  $('f-num').textContent = current.numero;
+  $('btn-delete').classList.remove('hidden');
+  toast('OS ' + current.numero + ' salva');
+  drive.syncLater();
+  return true;
+}
+
+// Fotos
+function renderPhotos() {
+  $('photos').innerHTML = current.fotos.map((f, i) =>
+    `<div class="photo"><img src="${f}" data-i="${i}" alt="foto ${i+1}"><button data-del="${i}" title="Remover">×</button></div>`).join('')
+    || '<span style="color:var(--muted)">Nenhuma foto ainda.</span>';
+}
+async function addFiles(files) {
+  for (const f of files) {
+    try { current.fotos.push(await compressImage(f)); } catch { toast('Não foi possível ler a imagem'); }
+  }
+  renderPhotos();
+}
+$('btn-camera').onclick = () => $('in-camera').click();
+$('btn-gallery').onclick = () => $('in-gallery').click();
+$('in-camera').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+$('in-gallery').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+$('photos').addEventListener('click', e => {
+  if (e.target.dataset.del !== undefined) { current.fotos.splice(+e.target.dataset.del, 1); renderPhotos(); }
+  else if (e.target.tagName === 'IMG') { $('viewer').querySelector('img').src = e.target.src; $('viewer').classList.remove('hidden'); }
+});
+$('viewer').onclick = () => $('viewer').classList.add('hidden');
+
+// Componentes
+function compRow(c = { nome: '', codigo: '', qtd: '1' }) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="c-nome" placeholder="Ex.: Capacitor eletrolítico" value="${esc(c.nome)}"></td>
+    <td><input class="c-cod" placeholder="Ex.: 1000µF 25V" value="${esc(c.codigo)}"></td>
+    <td><input class="c-qtd" type="number" min="1" value="${esc(c.qtd)}"></td>
+    <td><button class="danger" title="Remover">×</button></td>`;
+  tr.querySelector('button').onclick = () => tr.remove();
+  return tr;
+}
+function renderComps() {
+  const b = $('comp-body'); b.innerHTML = '';
+  current.componentes.forEach(c => b.appendChild(compRow(c)));
+}
+$('btn-add-comp').onclick = () => { const tr = compRow(); $('comp-body').appendChild(tr); tr.querySelector('input').focus(); };
+
+// Botões
+$('btn-new').onclick = () => openForm(null);
+$('btn-back').onclick = () => { show('list'); renderList(); };
+$('btn-save').onclick = async () => { if (await save()) { show('list'); renderList(); } };
+$('btn-delete').onclick = async () => {
+  if (!confirm(`Excluir a ${current.numero}? Essa ação não pode ser desfeita.`)) return;
+  // Marca como excluída (em vez de apagar) para que a exclusão chegue aos outros aparelhos pelo Drive
+  await putOS({ id: current.id, numero: current.numero, createdAt: current.createdAt, deleted: true, updatedAt: Date.now() });
+  toast('OS excluída'); show('list'); renderList(); drive.syncLater();
+};
+
+// ---------- Impressão ----------
+function printHTML(html) {
+  $('print-area').innerHTML = html;
+  setTimeout(() => window.print(), 100);
+}
+$('btn-label').onclick = async () => {
+  if (!(await save())) return;
+  const o = current;
+  const inicio = o.saida || o.entrada || today();
+  printHTML(`
+    <div class="label">
+      <div class="t">Garantia</div>
+      <div class="n">${esc(o.numero)}</div>
+      ${barcodeSVG(o.numero)}
+      <div class="d">Data: ${fmtDate(inicio)} · ${esc(o.garantia || 0)} dias</div>
+      <div class="d"><b>Válida até: ${fmtDate(addDays(inicio, o.garantia))}</b></div>
+    </div>`);
+};
+$('btn-print').onclick = async () => {
+  if (!(await save())) return;
+  const o = current;
+  const comps = o.componentes.length
+    ? `<table style="width:100%;border-collapse:collapse"><tr><th>Componente</th><th>Código / valor</th><th>Qtd</th></tr>
+       ${o.componentes.map(c => `<tr><td>${esc(c.nome)}</td><td>${esc(c.codigo)}</td><td>${esc(c.qtd)}</td></tr>`).join('')}</table>`
+    : '<p>—</p>';
+  printHTML(`
+    <div class="print-os">
+      <h2>Ordem de Serviço ${esc(o.numero)}</h2>
+      <table style="width:100%;border-collapse:collapse">
+        <tr><th>Placa</th><td>${esc(o.nome)}</td><th>Código fabricante</th><td>${esc(o.codigo || '—')}</td></tr>
+        <tr><th>Cliente</th><td>${esc(o.cliente || '—')}</td><th>Status</th><td>${esc(o.status)}</td></tr>
+        <tr><th>Entrada</th><td>${fmtDate(o.entrada)}</td><th>Saída</th><td>${fmtDate(o.saida)}</td></tr>
+        <tr><th>Garantia</th><td>${esc(o.garantia || 0)} dias${o.saida ? ' (até ' + fmtDate(addDays(o.saida, o.garantia)) + ')' : ''}</td>
+            <th>Valor</th><td>${o.valor ? 'R$ ' + Number(o.valor).toFixed(2).replace('.', ',') : '—'}</td></tr>
+      </table>
+      <h3>Defeito</h3><p>${esc(o.defeito || '—').replace(/\n/g, '<br>')}</p>
+      <h3>Solução</h3><p>${esc(o.solucao || '—').replace(/\n/g, '<br>')}</p>
+      <h3>Componentes utilizados</h3>${comps}
+      ${o.fotos.length ? `<div class="ph">${o.fotos.map(f => `<img src="${f}">`).join('')}</div>` : ''}
+    </div>`);
+};
+
+// ---------- Backup ----------
+$('btn-export').onclick = async () => {
+  const data = { versao: 1, exportadoEm: new Date().toISOString(), os: await getAll(),
+    meta: await tx('meta', 'readonly', async s => {
+      const keys = await req(s.getAllKeys()), vals = await req(s.getAll());
+      return Object.fromEntries(keys.map((k, i) => [k, vals[i]]));
+    }) };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
+  a.download = `backup-os-${today()}.json`; a.click();
+  toast(`Backup com ${data.os.length} OS salvo`);
+};
+$('btn-import').onclick = () => $('import-file').click();
+$('import-file').onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (!Array.isArray(data.os)) throw 0;
+    if (!confirm(`Restaurar ${data.os.length} OS? As OS com o mesmo número serão substituídas.`)) return;
+    await tx('os', 'readwrite', s => data.os.forEach(o => s.put(o)));
+    await tx('meta', 'readwrite', async s => {
+      for (const [k, v] of Object.entries(data.meta || {})) {
+        const cur = await req(s.get(k));
+        s.put(Math.max(cur || 0, v), k); // nunca volta o contador para trás
+      }
+    });
+    toast('Backup restaurado'); renderList();
+  } catch { toast('Arquivo de backup inválido'); }
+};
+
+// ---------- Google Drive ----------
+// Cada OS vira um arquivo JSON (fotos incluídas) na pasta "Ordens de Serviço" do Drive.
+// Na sincronização vale a versão mais recente (campo updatedAt) de cada OS.
+const drive = (() => {
+  const API = 'https://www.googleapis.com/drive/v3', UP = 'https://www.googleapis.com/upload/drive/v3';
+  const FOLDER = 'Ordens de Serviço';
+  let token = null, tokenExp = 0, tokenClient = null, folderId = null, busy = null, timer = null;
+
+  const setBtn = txt => $('btn-sync').textContent = txt;
+  const connected = () => token && Date.now() < tokenExp;
+
+  function getToken(silent) {
+    return new Promise(async (res, rej) => {
+      const clientId = await getMeta('clientId');
+      if (!clientId) return rej(new Error('config'));
+      if (!window.google?.accounts?.oauth2) return rej(new Error('Sem internet ou Google bloqueado'));
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: 'https://www.googleapis.com/auth/drive.file',
+        callback: r => {
+          if (r.error) return rej(new Error(r.error));
+          token = r.access_token; tokenExp = Date.now() + (r.expires_in - 60) * 1000;
+          setMeta('driveOn', true); res(token);
+        },
+        error_callback: e => rej(new Error(e.type || 'cancelado'))
+      });
+      tokenClient.requestAccessToken({ prompt: silent ? '' : undefined });
+    });
+  }
+
+  async function api(url, opts = {}) {
+    const r = await fetch(url, { ...opts, headers: { Authorization: 'Bearer ' + token, ...(opts.headers || {}) } });
+    if (r.status === 401) { token = null; throw new Error('Sessão do Google expirou'); }
+    if (!r.ok) throw new Error('Drive: ' + r.status + ' ' + (await r.text()).slice(0, 200));
+    return r;
+  }
+  const q = s => encodeURIComponent(s);
+
+  async function ensureFolder() {
+    if (folderId) return folderId;
+    const r = await (await api(`${API}/files?q=${q(`name='${FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id)`)).json();
+    if (r.files.length) return folderId = r.files[0].id;
+    const c = await (await api(`${API}/files?fields=id`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: FOLDER, mimeType: 'application/vnd.google-apps.folder' }) })).json();
+    return folderId = c.id;
+  }
+
+  async function listRemote() {
+    const map = new Map(); let page = '';
+    do {
+      const r = await (await api(`${API}/files?q=${q(`'${folderId}' in parents and trashed=false`)}&pageSize=1000&fields=nextPageToken,files(id,appProperties)${page ? '&pageToken=' + page : ''}`)).json();
+      for (const f of r.files) if (f.appProperties?.osId)
+        map.set(f.appProperties.osId, { fileId: f.id, updatedAt: Number(f.appProperties.updatedAt || 0) });
+      page = r.nextPageToken;
+    } while (page);
+    return map;
+  }
+
+  async function upload(o, fileId) {
+    const meta = { name: (o.numero || o.id) + '.json', mimeType: 'application/json',
+      appProperties: { osId: o.id, updatedAt: String(o.updatedAt || 0) } };
+    if (!fileId) meta.parents = [folderId];
+    const boundary = 'os' + Math.random().toString(36).slice(2);
+    const body = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n` +
+      `--${boundary}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(o)}\r\n--${boundary}--`;
+    await api(`${UP}/files${fileId ? '/' + fileId : ''}?uploadType=multipart&fields=id`, {
+      method: fileId ? 'PATCH' : 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body });
+  }
+
+  async function doSync(quiet) {
+    if (!connected()) await getToken(true);
+    setBtn('☁️ Sincronizando…');
+    await ensureFolder();
+    const remote = await listRemote();
+    const local = new Map((await getAll()).map(o => [o.id, o]));
+    let up = 0, down = 0;
+    for (const [id, o] of local) {
+      const r = remote.get(id);
+      if (!r || (o.updatedAt || 0) > r.updatedAt) { await upload(o, r?.fileId); up++; }
+    }
+    for (const [id, r] of remote) {
+      const o = local.get(id);
+      if (!o || r.updatedAt > (o.updatedAt || 0)) {
+        await putOS(await (await api(`${API}/files/${r.fileId}?alt=media`)).json()); down++;
+      }
+    }
+    await setMeta('lastSync', Date.now());
+    setBtn('☁️ Sincronizado');
+    if (!quiet && (up || down)) toast(`Drive: ${up} enviada(s), ${down} recebida(s)`);
+    else if (!quiet) toast('Drive: tudo em dia');
+    if (down && !$('view-list').classList.contains('hidden')) renderList();
+  }
+
+  function sync(quiet) {
+    if (!busy) busy = doSync(quiet)
+      .catch(e => {
+        if (e.message === 'config') { toast('Configure o Client ID do Google primeiro'); openConfig(); }
+        else if (!quiet) toast('Erro ao sincronizar: ' + e.message);
+        setBtn(connected() ? '☁️ Sincronizar' : '☁️ Conectar Drive');
+        throw e;
+      })
+      .finally(() => busy = null);
+    return busy;
+  }
+  // Depois de salvar: envia em segundo plano se já estiver conectado
+  function syncLater() {
+    if (!connected()) { setBtn('☁️ Sincronizar (pendente)'); return; }
+    clearTimeout(timer); timer = setTimeout(() => sync(true).catch(() => {}), 800);
+  }
+  return { sync, syncLater, connected };
+})();
+
+$('btn-sync').onclick = () => drive.sync(false).catch(() => {});
+
+async function openConfig() {
+  $('cfg-client').value = (await getMeta('clientId')) || '';
+  const last = await getMeta('lastSync');
+  $('cfg-status').textContent = 'Endereço deste app: ' + location.origin +
+    (last ? ' · Última sincronização: ' + new Date(last).toLocaleString('pt-BR') : '');
+  show('config');
+}
+$('btn-config').onclick = openConfig;
+$('cfg-back').onclick = () => { show('list'); renderList(); };
+$('cfg-save').onclick = async () => {
+  await setMeta('clientId', $('cfg-client').value.trim());
+  toast('Configuração salva'); show('list'); renderList();
+};
+
+// ---------- Início ----------
+if ('serviceWorker' in navigator && location.protocol !== 'file:')
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+openDB().then(d => { db = d; renderList(); }).catch(() => alert('Não foi possível abrir o banco de dados do navegador.'));
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1f6feb"/>
+  <rect x="116" y="136" width="280" height="240" rx="20" fill="#0b8a4a" stroke="#fff" stroke-width="14"/>
+  <rect x="196" y="206" width="120" height="100" rx="8" fill="#1d2330"/>
+  <g stroke="#fff" stroke-width="12" stroke-linecap="round">
+    <path d="M216 136v-40M256 136v-40M296 136v-40M216 416v-40M256 416v-40M296 416v-40"/>
+    <path d="M116 216h-40M116 296h-40M436 216h-40M436 296h-40"/>
+  </g>
+  <text x="256" y="272" font-family="Arial, sans-serif" font-weight="900" font-size="54" fill="#fff" text-anchor="middle">OS</text>
+</svg>
