@@ -490,6 +490,8 @@ $('import-file').onchange = async e => {
 const drive = (() => {
   const API = 'https://www.googleapis.com/drive/v3', UP = 'https://www.googleapis.com/upload/drive/v3';
   const FOLDER = 'Ordens de Serviço';
+  // Client ID público do projeto "Ordem de Servico" no Google Cloud (pode ser trocado em ⚙️)
+  const DEFAULT_CLIENT_ID = '712074222194-hdiaqg8o8l1heivb7r94kd7gc59bvbk9.apps.googleusercontent.com';
   let token = null, tokenExp = 0, tokenClient = null, folderId = null, busy = null, timer = null;
 
   const setBtn = txt => $('btn-sync').textContent = txt;
@@ -497,7 +499,7 @@ const drive = (() => {
 
   function getToken(silent) {
     return new Promise(async (res, rej) => {
-      const clientId = await getMeta('clientId');
+      const clientId = (await getMeta('clientId')) || DEFAULT_CLIENT_ID;
       if (!clientId) return rej(new Error('config'));
       if (!window.google?.accounts?.oauth2) return rej(new Error('Sem internet ou Google bloqueado'));
       tokenClient = google.accounts.oauth2.initTokenClient({

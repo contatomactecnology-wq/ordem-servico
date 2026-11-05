@@ -37,10 +37,10 @@ As OS **não** ficam no GitHub, só o programa. Os dados ficam no aparelho e no 
 
 ## 3. Usar
 
-1. Abra o endereço do app, toque em **⚙️**, cole o **Client ID** e salve.
+1. Abra o endereço do app. O Client ID já vem configurado (só use **⚙️** se criar outro).
 2. Toque em **☁️ Conectar Drive** e entre com sua conta Google.
 3. **No Android**: abra o endereço no Chrome, toque no menu **⋮ → Instalar app** (ou "Adicionar à tela inicial").
-   Repita o passo 1 no celular (o Client ID fica salvo em cada aparelho).
+   Depois toque em **☁️ Conectar Drive** com a mesma conta Google.
 
 ### Como funciona a sincronização
 - Ao salvar uma OS conectado, ela vai para o Drive em seguida.
