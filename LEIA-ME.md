@@ -58,3 +58,29 @@ ou recorte de uma folha A4.
 
 ### Backup extra
 O botão **Backup** baixa um arquivo `.json` com todas as OS. Para recuperar, use **Restaurar**.
+
+### Botão voltar do celular
+O "voltar" do Android funciona dentro do app: fecha a foto aberta, volta para a tela anterior
+e, na tela inicial, pergunta **"Deseja sair do programa?"**. Se houver alterações não salvas numa OS
+ou num item de estoque, o app pergunta antes de sair da tela.
+
+### Orçamento
+Dentro de cada OS, no quadro **💰 Orçamento**:
+- Adicione itens (peças e serviços) com quantidade e valor, além de mão de obra e desconto.
+- **⬇ Trazer componentes da OS** copia os componentes usados, já com o preço de venda do estoque.
+- **📲 Enviar por WhatsApp** abre a conversa com o telefone do cliente com o orçamento pronto.
+  **📤 Compartilhar** envia por qualquer app. **🖨️ Imprimir / PDF** gera a folha com espaço para assinatura.
+- Ao enviar, o status muda para **Enviado**. Depois marque **Aprovado** ou **Recusado**.
+- O nome e o telefone da sua empresa que aparecem no orçamento ficam em **⚙️**.
+
+### Estoque de componentes
+Na aba **📦 Estoque**, cadastre cada componente com quantidade, estoque mínimo, custo e preço de venda.
+- Na OS, ao escolher um componente da lista de sugestões (borda verde), o app **dá baixa no estoque** ao salvar.
+  Se a quantidade mudar depois, só a diferença é ajustada. Excluir a OS devolve os componentes ao estoque.
+- Itens no mínimo ou abaixo aparecem em vermelho, e a aba mostra quantos estão baixos.
+- O estoque também é sincronizado com o Google Drive (arquivos `EST-....json`).
+
+### Relatório de status
+Na aba **📊 Relatório**, filtre por **cliente**, status da OS, status do orçamento e período de entrada.
+O relatório mostra os totais, pode ser impresso e, com um cliente escolhido,
+**📲 Enviar ao cliente** manda pelo WhatsApp a lista das OS dele com o status de cada uma.

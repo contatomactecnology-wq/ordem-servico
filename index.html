@@ -22,23 +22,34 @@
   * { box-sizing: border-box; }
   body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background: var(--bg); color: var(--text); }
-  header { display: flex; gap: 12px; align-items: center; justify-content: space-between;
-    padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line);
-    position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
-  header h1 { font-size: 18px; margin: 0; }
+  header { padding: 10px 16px 0; background: var(--card); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 5; }
+  header .top { display: flex; gap: 8px; align-items: center; justify-content: space-between; max-width: 980px; margin: 0 auto; }
+  header h1 { font-size: 18px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .top .row { flex-wrap: nowrap; }
+  header .top button { white-space: nowrap; padding: 7px 10px; }
+  .grid.tight { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  nav.tabs { display: flex; gap: 2px; overflow-x: auto; max-width: 980px; margin: 4px auto 0; }
+  nav.tabs button { border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none;
+    padding: 10px 14px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
   main { max-width: 980px; margin: 0 auto; padding: 16px; }
   button, .btn { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--text);
     padding: 8px 14px; border-radius: 8px; cursor: pointer; }
   button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
   button.danger { color: var(--danger); }
   button:hover { filter: brightness(0.96); }
+  button:disabled { opacity: .5; cursor: default; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card h3 { margin: 0; font-size: 16px; }
   label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  label.chk { display: flex; align-items: center; gap: 6px; margin: 0; white-space: nowrap; }
+  label.chk input { width: auto; }
   input, textarea, select { width: 100%; font: inherit; padding: 9px 10px; border: 1px solid var(--line);
     border-radius: 8px; background: var(--bg); color: var(--text); }
   textarea { min-height: 80px; resize: vertical; }
-  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .full { grid-column: 1 / -1; }
   .os-num { font-size: 26px; font-weight: 800; letter-spacing: 1px; color: var(--accent); }
   .list-item { display: flex; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -48,22 +59,33 @@
   .li-main { flex: 1; min-width: 0; }
   .li-main b { display: block; }
   .li-main small { color: var(--muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .li-side { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .li-side small { color: var(--muted); }
   .badge { font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
-  .st-Aberta { color: var(--warn); } .st-Concluída { color: var(--ok); } .st-Entregue { color: var(--muted); }
   .photos { display: flex; gap: 10px; flex-wrap: wrap; }
   .photo { position: relative; }
   .photo img { width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; }
   .photo button { position: absolute; top: 4px; right: 4px; padding: 0 7px; background: rgba(0,0,0,.6); color: #fff; border: 0; }
+  .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: middle; }
   th { font-size: 12px; color: var(--muted); }
   td input { padding: 6px 8px; }
+  .num { text-align: right; white-space: nowrap; }
+  tr.linked .c-nome { border-color: var(--ok); }
+  .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-bottom: 16px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .stat b { display: block; font-size: 20px; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .low { color: var(--danger); }
+  .total-line { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--line); }
+  .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
   .empty { text-align: center; color: var(--muted); padding: 40px 10px; }
   .hidden { display: none !important; }
   #viewer { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: grid; place-items: center; z-index: 20; cursor: zoom-out; }
   #viewer img { max-width: 95vw; max-height: 95vh; }
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #222; color: #fff;
-    padding: 10px 18px; border-radius: 8px; z-index: 30; }
+    padding: 10px 18px; border-radius: 8px; z-index: 30; max-width: 90vw; text-align: center; }
 
   /* Área de impressão */
   #print-area { display: none; }
@@ -80,57 +102,48 @@
   .label svg { width: 100%; height: 12mm; }
   .print-os { font-family: Arial, sans-serif; color: #000; font-size: 11pt; }
   .print-os h2 { margin: 0 0 4mm; }
-  .print-os table td, .print-os table th { border: 1px solid #999; padding: 4px 6px; }
+  .print-os table { border-collapse: collapse; width: 100%; }
+  .print-os table td, .print-os table th { border: 1px solid #999; padding: 4px 6px; color: #000; font-size: 10pt; }
   .print-os .ph { display: flex; gap: 4mm; flex-wrap: wrap; margin-top: 4mm; }
   .print-os .ph img { width: 55mm; height: 55mm; object-fit: cover; border: 1px solid #999; }
+  .print-os .emp { border-bottom: 2px solid #000; padding-bottom: 3mm; margin-bottom: 4mm; }
+  .print-os .tot { text-align: right; font-size: 14pt; font-weight: bold; margin-top: 3mm; }
+  .print-os .ass { margin-top: 18mm; border-top: 1px solid #000; width: 80mm; padding-top: 1mm; font-size: 9pt; }
 </style>
 </head>
 <body>
 <header>
-  <h1>🔧 Ordens de Serviço</h1>
-  <div class="row">
-    <button class="primary" id="btn-new">+ Nova OS</button>
-    <button id="btn-sync" title="Sincronizar com o Google Drive">☁️ Conectar Drive</button>
-    <button id="btn-config" title="Configurações">⚙️</button>
-    <button id="btn-export" title="Salvar backup de todas as OS em arquivo">Backup</button>
-    <button id="btn-import" title="Restaurar backup">Restaurar</button>
-    <input type="file" id="import-file" accept=".json" class="hidden">
+  <div class="top">
+    <h1>🔧 Ordens de Serviço</h1>
+    <div class="row">
+      <button id="btn-sync" title="Sincronizar com o Google Drive">☁️ Conectar</button>
+      <button id="btn-config" title="Configurações">⚙️</button>
+    </div>
   </div>
+  <nav class="tabs">
+    <button data-tab="list" class="active">📋 OS</button>
+    <button data-tab="estoque">📦 Estoque <span id="low-badge" class="low"></span></button>
+    <button data-tab="relatorio">📊 Relatório</button>
+  </nav>
 </header>
 
 <main>
-  <!-- LISTA -->
+  <!-- LISTA DE OS -->
   <section id="view-list">
     <div class="card">
       <div class="row">
-        <input id="search" placeholder="Buscar por nº OS, nome da placa, código, defeito, componente…" style="flex:1;min-width:200px">
+        <input id="search" placeholder="Buscar por nº OS, placa, código, cliente, defeito…" style="flex:1;min-width:180px">
         <select id="filter-status" style="width:auto">
           <option value="">Todos os status</option>
           <option>Aberta</option><option>Concluída</option><option>Entregue</option>
         </select>
+        <button class="primary" id="btn-new">+ Nova OS</button>
       </div>
     </div>
     <div class="card" style="padding:0" id="list"></div>
   </section>
 
-  <!-- CONFIGURAÇÕES -->
-  <section id="view-config" class="hidden">
-    <div class="card">
-      <h2 style="margin-top:0">Google Drive</h2>
-      <p style="color:var(--muted)">As OS ficam salvas no aparelho e são copiadas para a pasta
-        <b>Ordens de Serviço</b> no seu Google Drive. Assim o celular Android e o computador
-        enxergam as mesmas OS. Veja o passo a passo no arquivo <b>LEIA-ME.md</b>.</p>
-      <label for="cfg-client">Client ID do Google (OAuth)</label>
-      <input id="cfg-client" placeholder="123456789-xxxx.apps.googleusercontent.com">
-      <div class="row" style="margin-top:12px">
-        <button class="primary" id="cfg-save">Salvar</button>
-        <button id="cfg-back">← Voltar</button>
-      </div>
-      <p id="cfg-status" style="color:var(--muted);margin-bottom:0"></p>
-    </div>
-  </section>
-
-  <!-- FORMULÁRIO -->
+  <!-- FORMULÁRIO DA OS -->
   <section id="view-form" class="hidden">
     <div class="card">
       <div class="row" style="justify-content:space-between">
@@ -160,24 +173,59 @@
     <div class="card grid">
       <div><label for="f-nome">Nome da placa *</label><input id="f-nome" placeholder="Ex.: Placa principal TV Samsung"></div>
       <div><label for="f-codigo">Código do fabricante</label><input id="f-codigo" placeholder="Ex.: BN41-02568A"></div>
-      <div><label for="f-cliente">Cliente</label><input id="f-cliente" placeholder="Nome / telefone (opcional)"></div>
+      <div><label for="f-cliente">Cliente</label><input id="f-cliente" list="dl-clientes" placeholder="Nome do cliente"></div>
+      <div><label for="f-telefone">Telefone / WhatsApp</label><input id="f-telefone" type="tel" inputmode="tel" placeholder="(11) 99999-9999"></div>
       <div><label for="f-entrada">Data de entrada</label><input id="f-entrada" type="date"></div>
       <div><label for="f-saida">Data de saída</label><input id="f-saida" type="date"></div>
       <div><label for="f-garantia">Garantia (dias)</label><input id="f-garantia" type="number" min="0" value="90"></div>
       <div><label for="f-status">Status</label>
         <select id="f-status"><option>Aberta</option><option>Concluída</option><option>Entregue</option></select></div>
-      <div><label for="f-valor">Valor (R$)</label><input id="f-valor" type="number" min="0" step="0.01" placeholder="0,00"></div>
       <div class="full"><label for="f-defeito">Defeito</label><textarea id="f-defeito" placeholder="Defeito relatado / encontrado"></textarea></div>
       <div class="full"><label for="f-solucao">Solução</label><textarea id="f-solucao" placeholder="O que foi feito"></textarea></div>
     </div>
 
     <div class="card">
-      <label>Componentes utilizados</label>
-      <table>
-        <thead><tr><th>Componente</th><th>Código / valor</th><th style="width:80px">Qtd</th><th style="width:40px"></th></tr></thead>
-        <tbody id="comp-body"></tbody>
-      </table>
+      <h3>🔩 Componentes utilizados</h3>
+      <p class="hint">Escolha um item da lista para dar baixa automática no estoque (borda verde = ligado ao estoque).</p>
+      <div class="table-wrap">
+        <table style="min-width:420px">
+          <thead><tr><th>Componente</th><th>Código / valor</th><th style="width:70px">Qtd</th><th style="width:40px"></th></tr></thead>
+          <tbody id="comp-body"></tbody>
+        </table>
+      </div>
       <button id="btn-add-comp" style="margin-top:10px">+ Adicionar componente</button>
+    </div>
+
+    <div class="card" id="orc-card">
+      <div class="row" style="justify-content:space-between">
+        <h3>💰 Orçamento</h3>
+        <select id="o-status" style="width:auto">
+          <option>Não enviado</option><option>Enviado</option><option>Aprovado</option><option>Recusado</option>
+        </select>
+      </div>
+      <div class="table-wrap" style="margin-top:10px">
+        <table style="min-width:480px">
+          <thead><tr><th>Descrição</th><th style="width:70px">Qtd</th><th style="width:110px">Valor un. (R$)</th><th class="num" style="width:100px">Subtotal</th><th style="width:40px"></th></tr></thead>
+          <tbody id="orc-body"></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button id="btn-orc-add">+ Item</button>
+        <button id="btn-orc-comps">⬇ Trazer componentes da OS</button>
+      </div>
+      <div class="grid" style="margin-top:14px">
+        <div><label for="o-mao">Mão de obra (R$)</label><input id="o-mao" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+        <div><label for="o-desconto">Desconto (R$)</label><input id="o-desconto" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+        <div><label for="o-validade">Validade (dias)</label><input id="o-validade" type="number" min="1" value="7"></div>
+        <div class="full"><label for="o-obs">Observações para o cliente</label>
+          <textarea id="o-obs" placeholder="Ex.: Prazo de 3 dias úteis após aprovação. Pagamento via Pix."></textarea></div>
+      </div>
+      <div class="total-line"><span>Total</span><span id="o-total">R$ 0,00</span></div>
+      <div class="row" style="margin-top:12px">
+        <button class="primary" id="btn-orc-whats">📲 Enviar por WhatsApp</button>
+        <button id="btn-orc-share">📤 Compartilhar</button>
+        <button id="btn-orc-print">🖨️ Imprimir / PDF</button>
+      </div>
     </div>
 
     <div class="row" style="justify-content:space-between;margin-bottom:40px">
@@ -185,22 +233,131 @@
       <button class="primary" id="btn-save">💾 Salvar OS</button>
     </div>
   </section>
+
+  <!-- ESTOQUE -->
+  <section id="view-estoque" class="hidden">
+    <div class="card">
+      <div class="row">
+        <input id="s-search" placeholder="Buscar componente, código, local…" style="flex:1;min-width:180px">
+        <label class="chk"><input type="checkbox" id="s-low"> Só estoque baixo</label>
+        <button class="primary" id="btn-new-item">+ Novo item</button>
+      </div>
+    </div>
+    <div class="stats" id="s-stats"></div>
+    <div class="card" style="padding:0" id="s-list"></div>
+  </section>
+
+  <!-- ITEM DO ESTOQUE -->
+  <section id="view-item" class="hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3>📦 Item do estoque</h3>
+        <button id="btn-item-back">← Voltar</button>
+      </div>
+    </div>
+    <div class="card grid">
+      <div class="full"><label for="i-nome">Componente *</label><input id="i-nome" placeholder="Ex.: Capacitor eletrolítico"></div>
+      <div><label for="i-codigo">Código / valor</label><input id="i-codigo" placeholder="Ex.: 1000µF 25V"></div>
+      <div><label for="i-categoria">Categoria</label><input id="i-categoria" list="dl-categorias" placeholder="Ex.: Capacitores"></div>
+      <div><label for="i-local">Localização</label><input id="i-local" placeholder="Ex.: Gaveta 3"></div>
+      <div><label for="i-qtd">Quantidade em estoque</label>
+        <div class="row" style="flex-wrap:nowrap">
+          <button id="i-menos" type="button">−</button>
+          <input id="i-qtd" type="number" step="any" inputmode="decimal" style="text-align:center">
+          <button id="i-mais" type="button">+</button>
+        </div></div>
+      <div><label for="i-min">Estoque mínimo</label><input id="i-min" type="number" min="0" step="any" placeholder="Avisar quando chegar a…"></div>
+      <div><label for="i-custo">Custo unitário (R$)</label><input id="i-custo" type="number" min="0" step="0.01" inputmode="decimal"></div>
+      <div><label for="i-preco">Preço de venda (R$)</label><input id="i-preco" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    </div>
+    <div class="row" style="justify-content:space-between;margin-bottom:40px">
+      <button class="danger" id="btn-del-item">Excluir item</button>
+      <button class="primary" id="btn-save-item">💾 Salvar item</button>
+    </div>
+  </section>
+
+  <!-- RELATÓRIO -->
+  <section id="view-relatorio" class="hidden">
+    <div class="card grid tight">
+      <div class="full"><label for="r-cliente">Cliente</label><select id="r-cliente"></select></div>
+      <div><label for="r-status">Status da OS</label>
+        <select id="r-status"><option value="">Todos</option><option>Aberta</option><option>Concluída</option><option>Entregue</option></select></div>
+      <div><label for="r-orc">Orçamento</label>
+        <select id="r-orc"><option value="">Todos</option><option>Não enviado</option><option>Enviado</option><option>Aprovado</option><option>Recusado</option></select></div>
+      <div><label for="r-de">Entrada de</label><input type="date" id="r-de"></div>
+      <div><label for="r-ate">Entrada até</label><input type="date" id="r-ate"></div>
+    </div>
+    <div class="stats" id="r-stats"></div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <h3 id="r-title">Todas as OS</h3>
+        <div class="row">
+          <button id="btn-r-whats" title="Escolha um cliente para enviar">📲 Enviar ao cliente</button>
+          <button id="btn-r-print">🖨️ Imprimir</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table style="min-width:640px">
+          <thead><tr><th>OS</th><th>Entrada</th><th>Cliente</th><th>Placa</th><th>Status</th><th>Orçamento</th><th class="num">Total</th></tr></thead>
+          <tbody id="r-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIGURAÇÕES -->
+  <section id="view-config" class="hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3>⚙️ Configurações</h3>
+        <button id="cfg-back">← Voltar</button>
+      </div>
+    </div>
+    <div class="card grid">
+      <div class="full"><h3>Sua empresa</h3><p class="hint">Aparece no orçamento enviado ao cliente.</p></div>
+      <div><label for="e-nome">Nome da empresa</label><input id="e-nome" placeholder="Ex.: MAC Tecnology"></div>
+      <div><label for="e-tel">Telefone</label><input id="e-tel" type="tel" placeholder="(11) 99999-9999"></div>
+      <div class="full"><label for="e-end">Endereço / cidade</label><input id="e-end"></div>
+    </div>
+    <div class="card">
+      <h3>Google Drive</h3>
+      <p class="hint">As OS e o estoque ficam no aparelho e são copiados para a pasta <b>Ordens de Serviço</b> do seu Google Drive.</p>
+      <label for="cfg-client" style="margin-top:10px">Client ID do Google (OAuth)</label>
+      <input id="cfg-client" placeholder="Deixe em branco para usar o padrão">
+      <p id="cfg-status" class="hint"></p>
+    </div>
+    <div class="card">
+      <h3>Backup</h3>
+      <div class="row" style="margin-top:10px">
+        <button id="btn-export">💾 Salvar backup</button>
+        <button id="btn-import">📂 Restaurar backup</button>
+        <input type="file" id="import-file" accept=".json" class="hidden">
+      </div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-bottom:40px">
+      <button class="primary" id="cfg-save">💾 Salvar configurações</button>
+    </div>
+  </section>
 </main>
 
+<datalist id="dl-estoque"></datalist>
+<datalist id="dl-clientes"></datalist>
+<datalist id="dl-categorias"></datalist>
 <div id="viewer" class="hidden"><img alt=""></div>
 <div id="print-area"></div>
 
 <script>
 // ---------- Banco de dados local (IndexedDB) ----------
-const DB_NAME = 'ordens_servico', DB_VER = 1;
+const DB_NAME = 'ordens_servico', DB_VER = 2;
 let db;
 function openDB() {
   return new Promise((res, rej) => {
     const r = indexedDB.open(DB_NAME, DB_VER);
     r.onupgradeneeded = () => {
       const d = r.result;
-      d.createObjectStore('os', { keyPath: 'id' });
-      d.createObjectStore('meta');
+      if (!d.objectStoreNames.contains('os')) d.createObjectStore('os', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta');
+      if (!d.objectStoreNames.contains('estoque')) d.createObjectStore('estoque', { keyPath: 'id' });
     };
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
@@ -217,10 +374,10 @@ function tx(store, mode, fn) {
   });
 }
 const req = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-const getAll = () => tx('os', 'readonly', s => req(s.getAll()));
-const putOS = o => tx('os', 'readwrite', s => s.put(o));
-const delOS = id => tx('os', 'readwrite', s => s.delete(id));
-
+const getAllFrom = store => tx(store, 'readonly', s => req(s.getAll()));
+const putIn = (store, o) => tx(store, 'readwrite', s => s.put(o));
+const getAll = () => getAllFrom('os');
+const putOS = o => putIn('os', o);
 const getMeta = k => tx('meta', 'readonly', s => req(s.get(k)));
 const setMeta = (k, v) => tx('meta', 'readwrite', s => s.put(v, k));
 
@@ -242,14 +399,38 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const today = () => new Date().toISOString().slice(0, 10);
 const fmtDate = d => d ? d.split('-').reverse().join('/') : '—';
+const num = v => { const n = parseFloat(String(v ?? '').replace(',', '.')); return isNaN(n) ? 0 : n; };
+const brl = v => num(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 function addDays(d, n) {
   const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + Number(n || 0));
   return x.toISOString().slice(0, 10);
 }
 function toast(msg) {
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2600);
 }
+const COLORS = { 'Aberta': 'var(--warn)', 'Concluída': 'var(--ok)', 'Entregue': 'var(--muted)',
+  'Não enviado': 'var(--muted)', 'Enviado': 'var(--accent)', 'Aprovado': 'var(--ok)', 'Recusado': 'var(--danger)' };
+const badge = s => `<span class="badge" style="color:${COLORS[s] || 'var(--muted)'}">${esc(s)}</span>`;
+const stat = (v, l, cls = '') => `<div class="stat"><b class="${cls}">${esc(v)}</b><span>${esc(l)}</span></div>`;
+// Link do WhatsApp: números brasileiros sem DDI ganham o 55
+function waLink(phone, text) {
+  let d = String(phone || '').replace(/\D/g, '');
+  if (d && d.length <= 11) d = '55' + d;
+  return 'https://wa.me/' + d + '?text=' + encodeURIComponent(text);
+}
+function openWhats(phone, text) {
+  const url = waLink(phone, text);
+  if (!window.open(url, '_blank')) location.href = url;
+}
+async function shareText(title, text) {
+  try {
+    if (navigator.share) return await navigator.share({ title, text });
+  } catch (e) { if (e.name === 'AbortError') return; }
+  try { await navigator.clipboard.writeText(text); toast('Texto copiado. Cole onde quiser enviar.'); }
+  catch { toast('Não foi possível compartilhar neste aparelho'); }
+}
+const getEmpresa = async () => (await getMeta('empresa')) || {};
 // Reduz a foto para no máx. 1600px (economiza espaço)
 function compressImage(file) {
   return new Promise((res, rej) => {
@@ -287,20 +468,70 @@ function barcodeSVG(text) {
   return `<svg viewBox="0 0 ${x} 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">${bars}</svg>`;
 }
 
-// ---------- Estado ----------
-let current = null; // OS em edição
+// ---------- Navegação e botão "voltar" do celular ----------
+// Mantemos uma entrada extra no histórico: o "voltar" do Android cai no popstate,
+// e decidimos aqui o que fazer (fechar foto, voltar de tela ou perguntar se quer sair).
+const VIEWS = ['list', 'form', 'estoque', 'item', 'relatorio', 'config'];
+const TABS = ['list', 'estoque', 'relatorio'];
+const PARENT = { item: 'estoque', config: 'list', estoque: 'list', relatorio: 'list' };
+let view = 'list', formReturn = 'list', formDirty = false, itemDirty = false, exiting = false;
 
-// ---------- Lista ----------
+function show(v) {
+  view = v;
+  for (const x of VIEWS) $('view-' + x).classList.toggle('hidden', x !== v);
+  const tab = TABS.includes(v) ? v : (v === 'form' ? formReturn : PARENT[v]);
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  window.scrollTo(0, 0);
+}
+function refresh(v) {
+  if (v === 'list') renderList();
+  else if (v === 'estoque') renderStock();
+  else if (v === 'relatorio') renderReport();
+}
+function leaveOk() {
+  if (view === 'form' && formDirty) return confirm('Sair sem salvar as alterações desta OS?');
+  if (view === 'item' && itemDirty) return confirm('Sair sem salvar as alterações deste item?');
+  return true;
+}
+function goTo(v) {
+  if (!leaveOk()) return;
+  formDirty = itemDirty = false;
+  show(v); refresh(v);
+}
+function goBack() {
+  if (!$('viewer').classList.contains('hidden')) { $('viewer').classList.add('hidden'); return; }
+  if (view === 'list') {
+    if (confirm('Deseja sair do programa?')) {
+      exiting = true; history.back();
+      // Se não houver para onde voltar (aba aberta direto), tenta fechar a janela
+      setTimeout(() => { window.close(); exiting = false; history.pushState({ guard: 1 }, ''); }, 500);
+    }
+    return;
+  }
+  goTo(view === 'form' ? formReturn : PARENT[view]);
+}
+history.replaceState({ base: 1 }, '');
+history.pushState({ guard: 1 }, '');
+addEventListener('popstate', () => {
+  if (exiting) { if (history.state?.base) history.back(); return; }
+  goBack();
+  if (!exiting) history.pushState({ guard: 1 }, '');
+});
+document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => goTo(b.dataset.tab));
+
+// ---------- Lista de OS ----------
 async function renderList() {
   const q = $('search').value.trim().toLowerCase();
   const st = $('filter-status').value;
   let all = (await getAll()).filter(o => !o.deleted).sort((a, b) => b.createdAt - a.createdAt);
   if (st) all = all.filter(o => o.status === st);
-  if (q) all = all.filter(o => [o.numero, o.nome, o.codigo, o.cliente, o.defeito, o.solucao,
+  if (q) all = all.filter(o => [o.numero, o.nome, o.codigo, o.cliente, o.telefone, o.defeito, o.solucao,
     ...(o.componentes || []).map(c => c.nome + ' ' + c.codigo)].join(' ').toLowerCase().includes(q));
   const el = $('list');
   if (!all.length) { el.innerHTML = `<div class="empty">Nenhuma OS encontrada.<br>Clique em <b>+ Nova OS</b> para começar.</div>`; return; }
-  el.innerHTML = all.map(o => `
+  el.innerHTML = all.map(o => {
+    const tot = orcTotal(o.orcamento);
+    return `
     <div class="list-item" data-id="${o.id}">
       ${o.fotos?.length ? `<img src="${o.fotos[0]}" alt="">` : `<div class="thumb-empty">sem foto</div>`}
       <div class="li-main">
@@ -308,42 +539,53 @@ async function renderList() {
         <small>${esc(o.codigo || '—')} · Entrada ${fmtDate(o.entrada)}${o.cliente ? ' · ' + esc(o.cliente) : ''}</small>
         <small>${esc(o.defeito || '')}</small>
       </div>
-      <span class="badge st-${esc(o.status)}">${esc(o.status)}</span>
-    </div>`).join('');
+      <div class="li-side">${badge(o.status)}${tot ? `<small>${brl(tot)}</small>` : ''}</div>
+    </div>`;
+  }).join('');
 }
 $('list').addEventListener('click', async e => {
   const it = e.target.closest('.list-item'); if (!it) return;
-  const o = (await getAll()).find(x => x.id === it.dataset.id);
-  openForm(o);
+  openForm((await getAll()).find(x => x.id === it.dataset.id), 'list');
 });
 $('search').addEventListener('input', renderList);
 $('filter-status').addEventListener('change', renderList);
 
-// ---------- Formulário ----------
-function show(view) {
-  for (const v of ['list', 'form', 'config']) $('view-' + v).classList.toggle('hidden', view !== v);
-  window.scrollTo(0, 0);
+// ---------- Formulário da OS ----------
+const FIELDS = ['nome', 'codigo', 'cliente', 'telefone', 'entrada', 'saida', 'garantia', 'status', 'defeito', 'solucao'];
+let current = null; // OS em edição
+
+async function fillClientList() {
+  const names = new Map();
+  for (const o of await getAll()) if (!o.deleted && o.cliente?.trim()) names.set(o.cliente.trim().toLowerCase(), o.cliente.trim());
+  $('dl-clientes').innerHTML = [...names.values()].sort().map(n => `<option value="${esc(n)}">`).join('');
 }
-function openForm(o) {
+function openForm(o, from = 'list') {
+  formReturn = from;
   current = o ? structuredClone(o) : {
-    id: crypto.randomUUID(), numero: null, fotos: [], nome: '', codigo: '', cliente: '',
-    entrada: today(), saida: '', garantia: 90, status: 'Aberta', valor: '',
-    defeito: '', solucao: '', componentes: [], createdAt: Date.now()
+    id: crypto.randomUUID(), numero: null, fotos: [], nome: '', codigo: '', cliente: '', telefone: '',
+    entrada: today(), saida: '', garantia: 90, status: 'Aberta',
+    defeito: '', solucao: '', componentes: [], baixa: {}, createdAt: Date.now()
   };
+  if (!current.orcamento) {
+    current.orcamento = emptyOrc();
+    if (num(current.valor)) current.orcamento.maoObra = current.valor; // OS antigas tinham só "valor"
+  }
   $('f-num').textContent = current.numero || '(gerado ao salvar)';
-  for (const k of ['nome','codigo','cliente','entrada','saida','garantia','status','valor','defeito','solucao'])
-    $('f-' + k).value = current[k] ?? '';
+  for (const k of FIELDS) $('f-' + k).value = current[k] ?? '';
   $('btn-delete').classList.toggle('hidden', !current.numero);
-  renderPhotos(); renderComps(); show('form');
+  renderPhotos(); renderComps(); renderOrc(); fillClientList();
+  formDirty = false;
+  show('form');
 }
 function readForm() {
-  for (const k of ['nome','codigo','cliente','entrada','saida','garantia','status','valor','defeito','solucao'])
-    current[k] = $('f-' + k).value.trim();
+  for (const k of FIELDS) current[k] = $('f-' + k).value.trim();
   current.componentes = [...$('comp-body').querySelectorAll('tr')].map(tr => ({
     nome: tr.querySelector('.c-nome').value.trim(),
     codigo: tr.querySelector('.c-cod').value.trim(),
-    qtd: tr.querySelector('.c-qtd').value.trim()
+    qtd: tr.querySelector('.c-qtd').value.trim(),
+    estoqueId: tr.dataset.eid || ''
   })).filter(c => c.nome || c.codigo);
+  current.orcamento = readOrc();
 }
 async function save() {
   readForm();
@@ -354,14 +596,32 @@ async function save() {
     current.numero = await nextNumber();
   }
   if (current.status !== 'Aberta' && !current.saida) { current.saida = today(); $('f-saida').value = current.saida; }
+  // Baixa no estoque só da diferença desde o último salvamento
+  const use = usage(current.componentes);
+  const neg = await applyStock(current.baixa, use);
+  current.baixa = use;
   current.updatedAt = Date.now();
   await putOS(current);
+  formDirty = false;
   $('f-num').textContent = current.numero;
   $('btn-delete').classList.remove('hidden');
-  toast('OS ' + current.numero + ' salva');
+  toast('OS ' + current.numero + ' salva' + (neg.length ? ' · Estoque negativo: ' + neg.join(', ') : ''));
+  loadStockCache();
   drive.syncLater();
   return true;
 }
+$('view-form').addEventListener('input', e => {
+  formDirty = true;
+  if (e.target.closest('#orc-card')) updateOrcTotals();
+});
+$('f-cliente').addEventListener('change', async () => {
+  // Cliente já cadastrado: completa o telefone usado na última OS dele
+  const c = $('f-cliente').value.trim().toLowerCase();
+  if (!c || $('f-telefone').value.trim()) return;
+  const prev = (await getAll()).filter(o => !o.deleted && o.telefone && o.cliente?.trim().toLowerCase() === c)
+    .sort((a, b) => b.createdAt - a.createdAt)[0];
+  if (prev) $('f-telefone').value = prev.telefone;
+});
 
 // Fotos
 function renderPhotos() {
@@ -371,7 +631,7 @@ function renderPhotos() {
 }
 async function addFiles(files) {
   for (const f of files) {
-    try { current.fotos.push(await compressImage(f)); } catch { toast('Não foi possível ler a imagem'); }
+    try { current.fotos.push(await compressImage(f)); formDirty = true; } catch { toast('Não foi possível ler a imagem'); }
   }
   renderPhotos();
 }
@@ -380,19 +640,31 @@ $('btn-gallery').onclick = () => $('in-gallery').click();
 $('in-camera').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
 $('in-gallery').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
 $('photos').addEventListener('click', e => {
-  if (e.target.dataset.del !== undefined) { current.fotos.splice(+e.target.dataset.del, 1); renderPhotos(); }
+  if (e.target.dataset.del !== undefined) { current.fotos.splice(+e.target.dataset.del, 1); formDirty = true; renderPhotos(); }
   else if (e.target.tagName === 'IMG') { $('viewer').querySelector('img').src = e.target.src; $('viewer').classList.remove('hidden'); }
 });
 $('viewer').onclick = () => $('viewer').classList.add('hidden');
 
-// Componentes
-function compRow(c = { nome: '', codigo: '', qtd: '1' }) {
+// Componentes (ligados ao estoque pela lista de sugestões)
+function compRow(c = { nome: '', codigo: '', qtd: '1', estoqueId: '' }) {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td><input class="c-nome" placeholder="Ex.: Capacitor eletrolítico" value="${esc(c.nome)}"></td>
+  tr.dataset.eid = c.estoqueId || '';
+  tr.classList.toggle('linked', !!tr.dataset.eid);
+  tr.innerHTML = `<td><input class="c-nome" list="dl-estoque" placeholder="Ex.: Capacitor eletrolítico" value="${esc(c.nome)}"></td>
     <td><input class="c-cod" placeholder="Ex.: 1000µF 25V" value="${esc(c.codigo)}"></td>
-    <td><input class="c-qtd" type="number" min="1" value="${esc(c.qtd)}"></td>
+    <td><input class="c-qtd" type="number" min="1" step="any" value="${esc(c.qtd)}"></td>
     <td><button class="danger" title="Remover">×</button></td>`;
-  tr.querySelector('button').onclick = () => tr.remove();
+  const nome = tr.querySelector('.c-nome');
+  nome.addEventListener('change', () => {
+    const v = nome.value.trim().toLowerCase();
+    const it = stockCache.find(i => itemLabel(i).toLowerCase() === v)
+      || (stockCache.filter(i => i.nome.toLowerCase() === v).length === 1 ? stockCache.find(i => i.nome.toLowerCase() === v) : null);
+    if (it) { nome.value = it.nome; tr.querySelector('.c-cod').value = it.codigo || ''; tr.dataset.eid = it.id; }
+    else tr.dataset.eid = '';
+    tr.classList.toggle('linked', !!tr.dataset.eid);
+    tr.title = it ? `Ligado ao estoque (${num(it.qtd)} un disponíveis)` : '';
+  });
+  tr.querySelector('button').onclick = () => { tr.remove(); formDirty = true; };
   return tr;
 }
 function renderComps() {
@@ -401,15 +673,301 @@ function renderComps() {
 }
 $('btn-add-comp').onclick = () => { const tr = compRow(); $('comp-body').appendChild(tr); tr.querySelector('input').focus(); };
 
-// Botões
-$('btn-new').onclick = () => openForm(null);
-$('btn-back').onclick = () => { show('list'); renderList(); };
-$('btn-save').onclick = async () => { if (await save()) { show('list'); renderList(); } };
+// ---------- Orçamento ----------
+const emptyOrc = () => ({ itens: [], maoObra: '', desconto: '', validade: 7, obs: '', status: 'Não enviado', data: '' });
+function orcTotal(orc) {
+  if (!orc) return 0;
+  const itens = (orc.itens || []).reduce((s, i) => s + num(i.qtd) * num(i.valor), 0);
+  return Math.max(0, itens + num(orc.maoObra) - num(orc.desconto));
+}
+function orcRow(i = { desc: '', qtd: '1', valor: '' }) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="o-desc" placeholder="Peça ou serviço" value="${esc(i.desc)}"></td>
+    <td><input class="o-qtd" type="number" min="0" step="any" value="${esc(i.qtd)}"></td>
+    <td><input class="o-val" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(i.valor)}"></td>
+    <td class="num o-sub"></td>
+    <td><button class="danger" title="Remover">×</button></td>`;
+  tr.querySelector('button').onclick = () => { tr.remove(); formDirty = true; updateOrcTotals(); };
+  return tr;
+}
+function renderOrc() {
+  const o = current.orcamento, b = $('orc-body'); b.innerHTML = '';
+  (o.itens || []).forEach(i => b.appendChild(orcRow(i)));
+  $('o-mao').value = o.maoObra ?? ''; $('o-desconto').value = o.desconto ?? '';
+  $('o-validade').value = o.validade || 7; $('o-obs').value = o.obs || ''; $('o-status').value = o.status || 'Não enviado';
+  updateOrcTotals();
+}
+function readOrc() {
+  return {
+    ...current.orcamento,
+    itens: [...$('orc-body').querySelectorAll('tr')].map(tr => ({
+      desc: tr.querySelector('.o-desc').value.trim(),
+      qtd: tr.querySelector('.o-qtd').value,
+      valor: tr.querySelector('.o-val').value
+    })).filter(i => i.desc || num(i.valor)),
+    maoObra: $('o-mao').value, desconto: $('o-desconto').value, validade: $('o-validade').value,
+    obs: $('o-obs').value.trim(), status: $('o-status').value
+  };
+}
+function updateOrcTotals() {
+  $('orc-body').querySelectorAll('tr').forEach(tr =>
+    tr.querySelector('.o-sub').textContent = brl(num(tr.querySelector('.o-qtd').value) * num(tr.querySelector('.o-val').value)));
+  $('o-total').textContent = brl(orcTotal(readOrc()));
+}
+$('btn-orc-add').onclick = () => { const tr = orcRow(); $('orc-body').appendChild(tr); tr.querySelector('input').focus(); formDirty = true; };
+$('btn-orc-comps').onclick = () => {
+  // Copia os componentes da OS para o orçamento, com o preço de venda do estoque
+  const existing = new Set(readOrc().itens.map(i => i.desc.toLowerCase()));
+  let n = 0;
+  $('comp-body').querySelectorAll('tr').forEach(tr => {
+    const nome = tr.querySelector('.c-nome').value.trim(), cod = tr.querySelector('.c-cod').value.trim();
+    const desc = nome + (cod ? ' ' + cod : '');
+    if (!nome || existing.has(desc.toLowerCase())) return;
+    const it = stockCache.find(i => i.id === tr.dataset.eid);
+    $('orc-body').appendChild(orcRow({ desc, qtd: tr.querySelector('.c-qtd').value || '1', valor: it?.preco || '' }));
+    n++;
+  });
+  if (n) { formDirty = true; updateOrcTotals(); }
+  toast(n ? `${n} componente(s) adicionado(s)` : 'Nenhum componente novo para trazer');
+};
+async function orcText(o) {
+  const e = await getEmpresa(), orc = o.orcamento, L = [];
+  L.push(`*ORÇAMENTO ${o.numero}*`);
+  if (e.nome) L.push(e.nome + (e.tel ? ' · ' + e.tel : ''));
+  L.push('');
+  if (o.cliente) L.push('Cliente: ' + o.cliente);
+  L.push('Equipamento: ' + o.nome + (o.codigo ? ` (${o.codigo})` : ''));
+  if (o.defeito) L.push('Defeito: ' + o.defeito);
+  if (o.solucao) L.push('Serviço: ' + o.solucao);
+  if (orc.itens.length) {
+    L.push('', '*Peças / itens*');
+    orc.itens.forEach(i => L.push(`• ${num(i.qtd)}x ${i.desc} — ${brl(num(i.qtd) * num(i.valor))}`));
+  }
+  if (num(orc.maoObra)) L.push('Mão de obra: ' + brl(orc.maoObra));
+  if (num(orc.desconto)) L.push('Desconto: -' + brl(orc.desconto));
+  L.push('', `*TOTAL: ${brl(orcTotal(orc))}*`);
+  L.push('Válido até ' + fmtDate(addDays(orc.data || today(), orc.validade || 7)));
+  if (num(o.garantia)) L.push(`Garantia: ${num(o.garantia)} dias`);
+  if (orc.obs) L.push('', orc.obs);
+  return L.join('\n');
+}
+async function orcHTML(o) {
+  const e = await getEmpresa(), orc = o.orcamento;
+  return `
+    <div class="print-os">
+      <div class="emp"><b style="font-size:14pt">${esc(e.nome || 'Orçamento')}</b><br>${esc([e.tel, e.end].filter(Boolean).join(' · '))}</div>
+      <h2>Orçamento ${esc(o.numero)}</h2>
+      <p>Data: ${fmtDate(orc.data || today())} · Válido até ${fmtDate(addDays(orc.data || today(), orc.validade || 7))}</p>
+      <p><b>Cliente:</b> ${esc(o.cliente || '—')} ${o.telefone ? '· ' + esc(o.telefone) : ''}<br>
+         <b>Equipamento:</b> ${esc(o.nome)} ${o.codigo ? '(' + esc(o.codigo) + ')' : ''}<br>
+         ${o.defeito ? '<b>Defeito:</b> ' + esc(o.defeito) + '<br>' : ''}
+         ${o.solucao ? '<b>Serviço:</b> ' + esc(o.solucao) : ''}</p>
+      <table>
+        <tr><th>Descrição</th><th>Qtd</th><th>Valor un.</th><th>Subtotal</th></tr>
+        ${orc.itens.map(i => `<tr><td>${esc(i.desc)}</td><td>${num(i.qtd)}</td><td>${brl(i.valor)}</td><td>${brl(num(i.qtd) * num(i.valor))}</td></tr>`).join('')}
+        ${num(orc.maoObra) ? `<tr><td colspan="3">Mão de obra</td><td>${brl(orc.maoObra)}</td></tr>` : ''}
+        ${num(orc.desconto) ? `<tr><td colspan="3">Desconto</td><td>-${brl(orc.desconto)}</td></tr>` : ''}
+      </table>
+      <div class="tot">Total: ${brl(orcTotal(orc))}</div>
+      ${num(o.garantia) ? `<p>Garantia: ${num(o.garantia)} dias</p>` : ''}
+      ${orc.obs ? `<p>${esc(orc.obs).replace(/\n/g, '<br>')}</p>` : ''}
+      <div class="ass">Aprovado por (assinatura e data)</div>
+    </div>`;
+}
+async function sendOrc(mode) {
+  const o0 = readOrc();
+  if (!o0.itens.length && !num(o0.maoObra)) { toast('Adicione itens ou mão de obra ao orçamento'); return; }
+  if (!current.orcamento.data) current.orcamento.data = today();
+  if (mode !== 'print' && $('o-status').value === 'Não enviado') $('o-status').value = 'Enviado';
+  if (!(await save())) return;
+  if (mode === 'print') return printHTML(await orcHTML(current));
+  const text = await orcText(current);
+  if (mode === 'whats') {
+    if (!current.telefone) toast('Sem telefone na OS: escolha o contato no WhatsApp');
+    openWhats(current.telefone, text);
+  } else shareText('Orçamento ' + current.numero, text);
+}
+$('btn-orc-whats').onclick = () => sendOrc('whats');
+$('btn-orc-share').onclick = () => sendOrc('share');
+$('btn-orc-print').onclick = () => sendOrc('print');
+
+// Botões da OS
+$('btn-new').onclick = () => openForm(null, 'list');
+$('btn-back').onclick = goBack;
+$('btn-save').onclick = async () => { if (await save()) goTo(formReturn); };
 $('btn-delete').onclick = async () => {
   if (!confirm(`Excluir a ${current.numero}? Essa ação não pode ser desfeita.`)) return;
+  await applyStock(current.baixa, {}); // devolve ao estoque os componentes usados
   // Marca como excluída (em vez de apagar) para que a exclusão chegue aos outros aparelhos pelo Drive
   await putOS({ id: current.id, numero: current.numero, createdAt: current.createdAt, deleted: true, updatedAt: Date.now() });
-  toast('OS excluída'); show('list'); renderList(); drive.syncLater();
+  toast('OS excluída'); formDirty = false; goTo(formReturn); loadStockCache(); drive.syncLater();
+};
+
+// ---------- Estoque ----------
+let stockCache = [];
+const getStock = async () => (await getAllFrom('estoque')).filter(i => !i.deleted);
+const itemLabel = i => i.nome + (i.codigo ? ' — ' + i.codigo : '');
+const isLow = i => num(i.min) > 0 ? num(i.qtd) <= num(i.min) : num(i.qtd) <= 0;
+async function loadStockCache() {
+  stockCache = (await getStock()).sort((a, b) => a.nome.localeCompare(b.nome));
+  $('dl-estoque').innerHTML = stockCache.map(i => `<option value="${esc(itemLabel(i))}">Estoque: ${num(i.qtd)}</option>`).join('');
+  $('dl-categorias').innerHTML = [...new Set(stockCache.map(i => i.categoria).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join('');
+  const n = stockCache.filter(isLow).length;
+  $('low-badge').textContent = n ? `(${n}⚠)` : '';
+}
+// Quantidade de cada item do estoque usada pelos componentes de uma OS
+function usage(comps) {
+  const m = {};
+  for (const c of comps) if (c.estoqueId) m[c.estoqueId] = (m[c.estoqueId] || 0) + (num(c.qtd) || 0);
+  return m;
+}
+// Aplica no estoque a diferença entre o uso anterior e o novo; devolve itens que ficaram negativos
+async function applyStock(oldUse = {}, newUse = {}) {
+  const ids = new Set([...Object.keys(oldUse || {}), ...Object.keys(newUse)]);
+  const neg = [];
+  await tx('estoque', 'readwrite', async s => {
+    for (const id of ids) {
+      const d = (newUse[id] || 0) - ((oldUse || {})[id] || 0);
+      if (!d) continue;
+      const it = await req(s.get(id));
+      if (!it || it.deleted) continue;
+      it.qtd = num(it.qtd) - d; it.updatedAt = Date.now();
+      if (it.qtd < 0) neg.push(it.nome);
+      s.put(it);
+    }
+  });
+  return neg;
+}
+async function renderStock() {
+  await loadStockCache();
+  const all = stockCache, q = $('s-search').value.trim().toLowerCase();
+  let list = $('s-low').checked ? all.filter(isLow) : all;
+  if (q) list = list.filter(i => [i.nome, i.codigo, i.categoria, i.local].join(' ').toLowerCase().includes(q));
+  const lowN = all.filter(isLow).length;
+  $('s-stats').innerHTML = stat(all.length, 'Itens') + stat(all.reduce((s, i) => s + num(i.qtd), 0), 'Unidades')
+    + stat(lowN, 'Estoque baixo', lowN ? 'low' : '') + stat(brl(all.reduce((s, i) => s + num(i.qtd) * num(i.custo), 0)), 'Valor (custo)');
+  $('s-list').innerHTML = list.length ? list.map(i => `
+    <div class="list-item" data-id="${i.id}">
+      <div class="li-main">
+        <b>${esc(i.nome)}</b>
+        <small>${esc([i.codigo, i.categoria, i.local && '📍 ' + i.local].filter(Boolean).join(' · ') || '—')}</small>
+      </div>
+      <div class="li-side"><b class="${isLow(i) ? 'low' : ''}">${num(i.qtd)} un${isLow(i) ? ' ⚠' : ''}</b>
+        <small>mín ${num(i.min)}${num(i.preco) ? ' · ' + brl(i.preco) : ''}</small></div>
+    </div>`).join('')
+    : `<div class="empty">${all.length ? 'Nenhum item com esse filtro.' : 'Estoque vazio.<br>Clique em <b>+ Novo item</b> para cadastrar componentes.'}</div>`;
+}
+$('s-search').addEventListener('input', renderStock);
+$('s-low').addEventListener('change', renderStock);
+$('s-list').addEventListener('click', e => {
+  const it = e.target.closest('.list-item'); if (!it) return;
+  openItem(stockCache.find(i => i.id === it.dataset.id));
+});
+
+const IFIELDS = ['nome', 'codigo', 'categoria', 'local', 'qtd', 'min', 'custo', 'preco'];
+let curItem = null;
+function openItem(i) {
+  curItem = i ? structuredClone(i) : { id: crypto.randomUUID(), nome: '', codigo: '', categoria: '', local: '',
+    qtd: 0, min: 0, custo: '', preco: '', createdAt: Date.now() };
+  for (const k of IFIELDS) $('i-' + k).value = curItem[k] ?? '';
+  $('btn-del-item').classList.toggle('hidden', !i);
+  itemDirty = false;
+  show('item');
+}
+$('view-item').addEventListener('input', () => itemDirty = true);
+$('i-mais').onclick = () => { $('i-qtd').value = num($('i-qtd').value) + 1; itemDirty = true; };
+$('i-menos').onclick = () => { $('i-qtd').value = num($('i-qtd').value) - 1; itemDirty = true; };
+$('btn-new-item').onclick = () => openItem(null);
+$('btn-item-back').onclick = goBack;
+$('btn-save-item').onclick = async () => {
+  for (const k of IFIELDS) curItem[k] = $('i-' + k).value.trim();
+  if (!curItem.nome) { toast('Informe o nome do componente'); $('i-nome').focus(); return; }
+  curItem.qtd = num(curItem.qtd); curItem.min = num(curItem.min);
+  curItem.updatedAt = Date.now();
+  await putIn('estoque', curItem);
+  itemDirty = false; toast('Item salvo'); drive.syncLater(); goTo('estoque');
+};
+$('btn-del-item').onclick = async () => {
+  if (!confirm(`Excluir "${curItem.nome}" do estoque?`)) return;
+  await putIn('estoque', { id: curItem.id, nome: curItem.nome, deleted: true, updatedAt: Date.now() });
+  itemDirty = false; toast('Item excluído'); drive.syncLater(); goTo('estoque');
+};
+
+// ---------- Relatório de status ----------
+let reportRows = [], reportClients = new Map();
+async function renderReport() {
+  const all = (await getAll()).filter(o => !o.deleted);
+  reportClients = new Map();
+  for (const o of all) { const c = o.cliente?.trim(); if (c) reportClients.set(c.toLowerCase(), c); }
+  const sel = $('r-cliente'), prev = sel.value;
+  sel.innerHTML = '<option value="">Todos os clientes</option><option value="__sem">(sem cliente)</option>'
+    + [...reportClients].sort((a, b) => a[1].localeCompare(b[1])).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('');
+  sel.value = prev; if (sel.value !== prev) sel.value = '';
+  const fc = sel.value, fs = $('r-status').value, fo = $('r-orc').value, de = $('r-de').value, ate = $('r-ate').value;
+  reportRows = all.filter(o => {
+    const c = (o.cliente || '').trim().toLowerCase();
+    if (fc === '__sem' ? c : (fc && c !== fc)) return false;
+    if (fs && o.status !== fs) return false;
+    if (fo && (o.orcamento?.status || 'Não enviado') !== fo) return false;
+    if (de && (o.entrada || '') < de) return false;
+    if (ate && (o.entrada || '') > ate) return false;
+    return true;
+  }).sort((a, b) => (b.entrada || '').localeCompare(a.entrada || '') || b.createdAt - a.createdAt);
+  const R = reportRows, cnt = s => R.filter(o => o.status === s).length;
+  const tot = R.reduce((s, o) => s + orcTotal(o.orcamento), 0);
+  const apr = R.filter(o => o.orcamento?.status === 'Aprovado').reduce((s, o) => s + orcTotal(o.orcamento), 0);
+  $('r-stats').innerHTML = stat(R.length, 'OS') + stat(cnt('Aberta'), 'Abertas') + stat(cnt('Concluída'), 'Concluídas')
+    + stat(cnt('Entregue'), 'Entregues') + stat(brl(tot), 'Total orçado') + stat(brl(apr), 'Aprovado');
+  $('r-title').textContent = !fc ? 'Todas as OS' : fc === '__sem' ? 'OS sem cliente' : reportClients.get(fc);
+  $('btn-r-whats').disabled = !fc || fc === '__sem';
+  $('r-body').innerHTML = R.map(o => `
+    <tr data-id="${o.id}" style="cursor:pointer">
+      <td><b>${esc(o.numero)}</b></td><td>${fmtDate(o.entrada)}</td><td>${esc(o.cliente || '—')}</td><td>${esc(o.nome)}</td>
+      <td>${badge(o.status)}</td><td>${badge(o.orcamento?.status || 'Não enviado')}</td><td class="num">${brl(orcTotal(o.orcamento))}</td>
+    </tr>`).join('') || `<tr><td colspan="7" class="empty">Nenhuma OS com esses filtros.</td></tr>`;
+}
+for (const id of ['r-cliente', 'r-status', 'r-orc', 'r-de', 'r-ate']) $(id).addEventListener('change', renderReport);
+$('r-body').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-id]'); if (!tr) return;
+  openForm(reportRows.find(o => o.id === tr.dataset.id), 'relatorio');
+});
+function reportFilterText() {
+  const parts = [];
+  const fc = $('r-cliente').value;
+  if (fc) parts.push('Cliente: ' + (fc === '__sem' ? '(sem cliente)' : reportClients.get(fc)));
+  if ($('r-status').value) parts.push('Status: ' + $('r-status').value);
+  if ($('r-orc').value) parts.push('Orçamento: ' + $('r-orc').value);
+  if ($('r-de').value || $('r-ate').value) parts.push(`Entrada: ${fmtDate($('r-de').value)} a ${fmtDate($('r-ate').value)}`);
+  return parts.join(' · ') || 'Todas as OS';
+}
+$('btn-r-whats').onclick = async () => {
+  const e = await getEmpresa(), nome = reportClients.get($('r-cliente').value);
+  const phone = reportRows.find(o => o.telefone)?.telefone;
+  const L = [`*Status dos seus serviços*${e.nome ? ' — ' + e.nome : ''}`, `Cliente: ${nome}`, ''];
+  for (const o of reportRows) {
+    const t = orcTotal(o.orcamento);
+    L.push(`• *${o.numero}* — ${o.nome}${o.codigo ? ' (' + o.codigo + ')' : ''}`);
+    L.push(`   Entrada ${fmtDate(o.entrada)} · *${o.status}*${o.saida ? ' em ' + fmtDate(o.saida) : ''}`);
+    if (t) L.push(`   Orçamento: ${brl(t)} (${o.orcamento.status})`);
+  }
+  if (e.tel) L.push('', 'Dúvidas: ' + e.tel);
+  if (!phone) toast('Cliente sem telefone: escolha o contato no WhatsApp');
+  openWhats(phone, L.join('\n'));
+};
+$('btn-r-print').onclick = async () => {
+  const e = await getEmpresa(), R = reportRows;
+  printHTML(`
+    <div class="print-os">
+      <div class="emp"><b style="font-size:14pt">${esc(e.nome || 'Relatório de OS')}</b><br>${esc([e.tel, e.end].filter(Boolean).join(' · '))}</div>
+      <h2>Relatório de status</h2>
+      <p>${esc(reportFilterText())} · Emitido em ${fmtDate(today())}</p>
+      <table>
+        <tr><th>OS</th><th>Entrada</th><th>Cliente</th><th>Placa</th><th>Status</th><th>Orçamento</th><th>Total</th></tr>
+        ${R.map(o => `<tr><td>${esc(o.numero)}</td><td>${fmtDate(o.entrada)}</td><td>${esc(o.cliente || '—')}</td><td>${esc(o.nome)}</td>
+          <td>${esc(o.status)}</td><td>${esc(o.orcamento?.status || 'Não enviado')}</td><td>${brl(orcTotal(o.orcamento))}</td></tr>`).join('')}
+      </table>
+      <div class="tot">${R.length} OS · Total orçado ${brl(R.reduce((s, o) => s + orcTotal(o.orcamento), 0))}</div>
+    </div>`);
 };
 
 // ---------- Impressão ----------
@@ -432,20 +990,20 @@ $('btn-label').onclick = async () => {
 };
 $('btn-print').onclick = async () => {
   if (!(await save())) return;
-  const o = current;
+  const o = current, tot = orcTotal(o.orcamento);
   const comps = o.componentes.length
-    ? `<table style="width:100%;border-collapse:collapse"><tr><th>Componente</th><th>Código / valor</th><th>Qtd</th></tr>
+    ? `<table><tr><th>Componente</th><th>Código / valor</th><th>Qtd</th></tr>
        ${o.componentes.map(c => `<tr><td>${esc(c.nome)}</td><td>${esc(c.codigo)}</td><td>${esc(c.qtd)}</td></tr>`).join('')}</table>`
     : '<p>—</p>';
   printHTML(`
     <div class="print-os">
       <h2>Ordem de Serviço ${esc(o.numero)}</h2>
-      <table style="width:100%;border-collapse:collapse">
+      <table>
         <tr><th>Placa</th><td>${esc(o.nome)}</td><th>Código fabricante</th><td>${esc(o.codigo || '—')}</td></tr>
-        <tr><th>Cliente</th><td>${esc(o.cliente || '—')}</td><th>Status</th><td>${esc(o.status)}</td></tr>
+        <tr><th>Cliente</th><td>${esc(o.cliente || '—')}</td><th>Telefone</th><td>${esc(o.telefone || '—')}</td></tr>
         <tr><th>Entrada</th><td>${fmtDate(o.entrada)}</td><th>Saída</th><td>${fmtDate(o.saida)}</td></tr>
-        <tr><th>Garantia</th><td>${esc(o.garantia || 0)} dias${o.saida ? ' (até ' + fmtDate(addDays(o.saida, o.garantia)) + ')' : ''}</td>
-            <th>Valor</th><td>${o.valor ? 'R$ ' + Number(o.valor).toFixed(2).replace('.', ',') : '—'}</td></tr>
+        <tr><th>Status</th><td>${esc(o.status)}</td><th>Garantia</th><td>${esc(o.garantia || 0)} dias${o.saida ? ' (até ' + fmtDate(addDays(o.saida, o.garantia)) + ')' : ''}</td></tr>
+        <tr><th>Orçamento</th><td>${esc(o.orcamento.status)}</td><th>Valor</th><td>${tot ? brl(tot) : '—'}</td></tr>
       </table>
       <h3>Defeito</h3><p>${esc(o.defeito || '—').replace(/\n/g, '<br>')}</p>
       <h3>Solução</h3><p>${esc(o.solucao || '—').replace(/\n/g, '<br>')}</p>
@@ -454,9 +1012,27 @@ $('btn-print').onclick = async () => {
     </div>`);
 };
 
-// ---------- Backup ----------
+// ---------- Configurações e backup ----------
+async function openConfig() {
+  if (!leaveOk()) return;
+  formDirty = itemDirty = false;
+  const e = await getEmpresa();
+  $('e-nome').value = e.nome || ''; $('e-tel').value = e.tel || ''; $('e-end').value = e.end || '';
+  $('cfg-client').value = (await getMeta('clientId')) || '';
+  const last = await getMeta('lastSync');
+  $('cfg-status').textContent = 'Endereço deste app: ' + location.origin +
+    (last ? ' · Última sincronização: ' + new Date(last).toLocaleString('pt-BR') : '');
+  show('config');
+}
+$('btn-config').onclick = openConfig;
+$('cfg-back').onclick = goBack;
+$('cfg-save').onclick = async () => {
+  await setMeta('empresa', { nome: $('e-nome').value.trim(), tel: $('e-tel').value.trim(), end: $('e-end').value.trim() });
+  await setMeta('clientId', $('cfg-client').value.trim());
+  toast('Configurações salvas'); goTo('list');
+};
 $('btn-export').onclick = async () => {
-  const data = { versao: 1, exportadoEm: new Date().toISOString(), os: await getAll(),
+  const data = { versao: 2, exportadoEm: new Date().toISOString(), os: await getAll(), estoque: await getAllFrom('estoque'),
     meta: await tx('meta', 'readonly', async s => {
       const keys = await req(s.getAllKeys()), vals = await req(s.getAll());
       return Object.fromEntries(keys.map((k, i) => [k, vals[i]]));
@@ -464,7 +1040,7 @@ $('btn-export').onclick = async () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
   a.download = `backup-os-${today()}.json`; a.click();
-  toast(`Backup com ${data.os.length} OS salvo`);
+  toast(`Backup com ${data.os.length} OS e ${data.estoque.length} itens de estoque salvo`);
 };
 $('btn-import').onclick = () => $('import-file').click();
 $('import-file').onchange = async e => {
@@ -472,26 +1048,30 @@ $('import-file').onchange = async e => {
   try {
     const data = JSON.parse(await f.text());
     if (!Array.isArray(data.os)) throw 0;
-    if (!confirm(`Restaurar ${data.os.length} OS? As OS com o mesmo número serão substituídas.`)) return;
+    const est = Array.isArray(data.estoque) ? data.estoque : [];
+    if (!confirm(`Restaurar ${data.os.length} OS e ${est.length} itens de estoque? Os registros iguais serão substituídos.`)) return;
     await tx('os', 'readwrite', s => data.os.forEach(o => s.put(o)));
+    await tx('estoque', 'readwrite', s => est.forEach(o => s.put(o)));
     await tx('meta', 'readwrite', async s => {
       for (const [k, v] of Object.entries(data.meta || {})) {
         const cur = await req(s.get(k));
-        s.put(Math.max(cur || 0, v), k); // nunca volta o contador para trás
+        if (k.startsWith('seq-')) s.put(Math.max(cur || 0, v), k); // nunca volta o contador para trás
+        else if (cur == null) s.put(v, k);
       }
     });
-    toast('Backup restaurado'); renderList();
+    toast('Backup restaurado'); loadStockCache();
   } catch { toast('Arquivo de backup inválido'); }
 };
 
 // ---------- Google Drive ----------
-// Cada OS vira um arquivo JSON (fotos incluídas) na pasta "Ordens de Serviço" do Drive.
-// Na sincronização vale a versão mais recente (campo updatedAt) de cada OS.
+// Cada OS e cada item de estoque vira um arquivo JSON na pasta "Ordens de Serviço" do Drive.
+// Na sincronização vale a versão mais recente (campo updatedAt) de cada registro.
 const drive = (() => {
   const API = 'https://www.googleapis.com/drive/v3', UP = 'https://www.googleapis.com/upload/drive/v3';
   const FOLDER = 'Ordens de Serviço';
   // Client ID público do projeto "Ordem de Servico" no Google Cloud (pode ser trocado em ⚙️)
   const DEFAULT_CLIENT_ID = '712074222194-hdiaqg8o8l1heivb7r94kd7gc59bvbk9.apps.googleusercontent.com';
+  const KINDS = ['os', 'estoque'];
   let token = null, tokenExp = 0, tokenClient = null, folderId = null, busy = null, timer = null;
 
   const setBtn = txt => $('btn-sync').textContent = txt;
@@ -500,7 +1080,6 @@ const drive = (() => {
   function getToken(silent) {
     return new Promise(async (res, rej) => {
       const clientId = (await getMeta('clientId')) || DEFAULT_CLIENT_ID;
-      if (!clientId) return rej(new Error('config'));
       if (!window.google?.accounts?.oauth2) return rej(new Error('Sem internet ou Google bloqueado'));
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: clientId,
@@ -533,20 +1112,23 @@ const drive = (() => {
     return folderId = c.id;
   }
 
+  // Mapa "tipo:id" -> arquivo no Drive (arquivos antigos, sem tipo, são OS)
   async function listRemote() {
     const map = new Map(); let page = '';
     do {
       const r = await (await api(`${API}/files?q=${q(`'${folderId}' in parents and trashed=false`)}&pageSize=1000&fields=nextPageToken,files(id,appProperties)${page ? '&pageToken=' + page : ''}`)).json();
       for (const f of r.files) if (f.appProperties?.osId)
-        map.set(f.appProperties.osId, { fileId: f.id, updatedAt: Number(f.appProperties.updatedAt || 0) });
+        map.set((f.appProperties.kind || 'os') + ':' + f.appProperties.osId, { fileId: f.id, updatedAt: Number(f.appProperties.updatedAt || 0) });
       page = r.nextPageToken;
     } while (page);
     return map;
   }
 
-  async function upload(o, fileId) {
-    const meta = { name: (o.numero || o.id) + '.json', mimeType: 'application/json',
-      appProperties: { osId: o.id, updatedAt: String(o.updatedAt || 0) } };
+  async function upload(kind, o, fileId) {
+    const name = kind === 'os' ? (o.numero || o.id) + '.json'
+      : 'EST-' + String(o.nome || o.id).replace(/[^\w\-]+/g, '_').slice(0, 40) + '.json';
+    const meta = { name, mimeType: 'application/json',
+      appProperties: { osId: o.id, kind, updatedAt: String(o.updatedAt || 0) } };
     if (!fileId) meta.parents = [folderId];
     const boundary = 'os' + Math.random().toString(36).slice(2);
     const body = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n` +
@@ -557,34 +1139,35 @@ const drive = (() => {
 
   async function doSync(quiet) {
     if (!connected()) await getToken(true);
-    setBtn('☁️ Sincronizando…');
+    setBtn('☁️ …');
     await ensureFolder();
     const remote = await listRemote();
-    const local = new Map((await getAll()).map(o => [o.id, o]));
     let up = 0, down = 0;
-    for (const [id, o] of local) {
-      const r = remote.get(id);
-      if (!r || (o.updatedAt || 0) > r.updatedAt) { await upload(o, r?.fileId); up++; }
-    }
-    for (const [id, r] of remote) {
-      const o = local.get(id);
-      if (!o || r.updatedAt > (o.updatedAt || 0)) {
-        await putOS(await (await api(`${API}/files/${r.fileId}?alt=media`)).json()); down++;
+    for (const kind of KINDS) {
+      const local = new Map((await getAllFrom(kind)).map(o => [o.id, o]));
+      for (const [id, o] of local) {
+        const r = remote.get(kind + ':' + id);
+        if (!r || (o.updatedAt || 0) > r.updatedAt) { await upload(kind, o, r?.fileId); up++; }
+      }
+      for (const [key, r] of remote) {
+        if (!key.startsWith(kind + ':')) continue;
+        const o = local.get(key.slice(kind.length + 1));
+        if (!o || r.updatedAt > (o.updatedAt || 0)) {
+          await putIn(kind, await (await api(`${API}/files/${r.fileId}?alt=media`)).json()); down++;
+        }
       }
     }
     await setMeta('lastSync', Date.now());
-    setBtn('☁️ Sincronizado');
-    if (!quiet && (up || down)) toast(`Drive: ${up} enviada(s), ${down} recebida(s)`);
-    else if (!quiet) toast('Drive: tudo em dia');
-    if (down && !$('view-list').classList.contains('hidden')) renderList();
+    setBtn('☁️ OK');
+    if (!quiet) toast(up || down ? `Drive: ${up} enviado(s), ${down} recebido(s)` : 'Drive: tudo em dia');
+    if (down) { await loadStockCache(); if (TABS.includes(view)) refresh(view); }
   }
 
   function sync(quiet) {
     if (!busy) busy = doSync(quiet)
       .catch(e => {
-        if (e.message === 'config') { toast('Configure o Client ID do Google primeiro'); openConfig(); }
-        else if (!quiet) toast('Erro ao sincronizar: ' + e.message);
-        setBtn(connected() ? '☁️ Sincronizar' : '☁️ Conectar Drive');
+        if (!quiet) toast('Erro ao sincronizar: ' + e.message);
+        setBtn(connected() ? '☁️ Sincronizar' : '☁️ Conectar');
         throw e;
       })
       .finally(() => busy = null);
@@ -592,7 +1175,7 @@ const drive = (() => {
   }
   // Depois de salvar: envia em segundo plano se já estiver conectado
   function syncLater() {
-    if (!connected()) { setBtn('☁️ Sincronizar (pendente)'); return; }
+    if (!connected()) { setBtn('☁️ Pendente'); return; }
     clearTimeout(timer); timer = setTimeout(() => sync(true).catch(() => {}), 800);
   }
   return { sync, syncLater, connected };
@@ -600,24 +1183,11 @@ const drive = (() => {
 
 $('btn-sync').onclick = () => drive.sync(false).catch(() => {});
 
-async function openConfig() {
-  $('cfg-client').value = (await getMeta('clientId')) || '';
-  const last = await getMeta('lastSync');
-  $('cfg-status').textContent = 'Endereço deste app: ' + location.origin +
-    (last ? ' · Última sincronização: ' + new Date(last).toLocaleString('pt-BR') : '');
-  show('config');
-}
-$('btn-config').onclick = openConfig;
-$('cfg-back').onclick = () => { show('list'); renderList(); };
-$('cfg-save').onclick = async () => {
-  await setMeta('clientId', $('cfg-client').value.trim());
-  toast('Configuração salva'); show('list'); renderList();
-};
-
 // ---------- Início ----------
 if ('serviceWorker' in navigator && location.protocol !== 'file:')
   navigator.serviceWorker.register('sw.js').catch(() => {});
-openDB().then(d => { db = d; renderList(); }).catch(() => alert('Não foi possível abrir o banco de dados do navegador.'));
+openDB().then(async d => { db = d; await loadStockCache(); renderList(); })
+  .catch(() => alert('Não foi possível abrir o banco de dados do navegador.'));
 </script>
 </body>
 </html>
