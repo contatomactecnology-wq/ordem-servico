@@ -9,16 +9,26 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  // Aplica o tema antes de desenhar a página (evita piscar branco no modo noturno)
+  try { const t = localStorage.getItem('tema'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}
+</script>
 <style>
   :root {
     --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #667085;
     --line: #d9dde5; --accent: #1f6feb; --accent-text: #fff;
     --ok: #1a7f37; --warn: #b54708; --danger: #c62828;
+    color-scheme: light;
   }
+  /* Modo noturno: segue o celular (Automático) ou a escolha feita no app */
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #12151b; --card: #1b1f27; --text: #e6e8ec; --muted: #9aa3b2;
-      --line: #2e3440; --accent: #4c8dff; --accent-text: #fff; }
+    :root:not([data-theme="light"]) { --bg: #12151b; --card: #1b1f27; --text: #e6e8ec; --muted: #9aa3b2;
+      --line: #2e3440; --accent: #4c8dff; --accent-text: #fff;
+      --ok: #3fb950; --warn: #f0a046; --danger: #ff6b6b; color-scheme: dark; }
   }
+  :root[data-theme="dark"] { --bg: #12151b; --card: #1b1f27; --text: #e6e8ec; --muted: #9aa3b2;
+    --line: #2e3440; --accent: #4c8dff; --accent-text: #fff;
+    --ok: #3fb950; --warn: #f0a046; --danger: #ff6b6b; color-scheme: dark; }
   * { box-sizing: border-box; }
   body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background: var(--bg); color: var(--text); }
@@ -27,6 +37,8 @@
   header .top { display: flex; gap: 8px; align-items: center; justify-content: space-between; max-width: 980px; margin: 0 auto; }
   header h1 { font-size: 18px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   header .top .row { flex-wrap: nowrap; }
+  .h-short { display: none; }
+  @media (max-width: 460px) { .h-long { display: none; } .h-short { display: inline; } }
   header .top button { white-space: nowrap; padding: 7px 10px; }
   .grid.tight { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
   nav.tabs { display: flex; gap: 2px; overflow-x: auto; max-width: 980px; margin: 4px auto 0; }
@@ -114,8 +126,9 @@
 <body>
 <header>
   <div class="top">
-    <h1>🔧 Ordens de Serviço</h1>
+    <h1>🔧 <span class="h-long">Ordens de Serviço</span><span class="h-short">OS</span></h1>
     <div class="row">
+      <button id="btn-theme" title="Modo noturno">🌙</button>
       <button id="btn-sync" title="Sincronizar com o Google Drive">☁️ Conectar</button>
       <button id="btn-config" title="Configurações">⚙️</button>
     </div>
@@ -318,6 +331,15 @@
       <div><label for="e-nome">Nome da empresa</label><input id="e-nome" placeholder="Ex.: MAC Tecnology"></div>
       <div><label for="e-tel">Telefone</label><input id="e-tel" type="tel" placeholder="(11) 99999-9999"></div>
       <div class="full"><label for="e-end">Endereço / cidade</label><input id="e-end"></div>
+    </div>
+    <div class="card">
+      <h3>Aparência</h3>
+      <label for="cfg-tema" style="margin-top:10px">Modo noturno</label>
+      <select id="cfg-tema">
+        <option value="auto">Automático (igual ao celular)</option>
+        <option value="light">Claro</option>
+        <option value="dark">Escuro</option>
+      </select>
     </div>
     <div class="card">
       <h3>Google Drive</h3>
@@ -1011,6 +1033,26 @@ $('btn-print').onclick = async () => {
       ${o.fotos.length ? `<div class="ph">${o.fotos.map(f => `<img src="${f}">`).join('')}</div>` : ''}
     </div>`);
 };
+
+// ---------- Modo noturno ----------
+// "auto" segue o celular; "light"/"dark" fixam o tema. Fica salvo em cada aparelho.
+const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+function getTheme() { try { return localStorage.getItem('tema') || 'auto'; } catch { return 'auto'; } }
+const isDark = () => getTheme() === 'dark' || (getTheme() === 'auto' && darkQuery.matches);
+function applyTheme(t) {
+  try { if (t === 'auto') localStorage.removeItem('tema'); else localStorage.setItem('tema', t); } catch {}
+  if (t === 'auto') delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = t;
+  const dark = isDark();
+  $('btn-theme').textContent = dark ? '☀️' : '🌙';
+  $('btn-theme').title = dark ? 'Mudar para modo claro' : 'Mudar para modo noturno';
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1f27' : '#1f6feb';
+  $('cfg-tema').value = t;
+}
+$('btn-theme').onclick = () => applyTheme(isDark() ? 'light' : 'dark');
+$('cfg-tema').onchange = () => applyTheme($('cfg-tema').value);
+darkQuery.addEventListener('change', () => { if (getTheme() === 'auto') applyTheme('auto'); });
+applyTheme(getTheme());
 
 // ---------- Configurações e backup ----------
 async function openConfig() {

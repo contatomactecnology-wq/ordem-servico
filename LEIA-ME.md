@@ -84,3 +84,8 @@ Na aba **📦 Estoque**, cadastre cada componente com quantidade, estoque mínim
 Na aba **📊 Relatório**, filtre por **cliente**, status da OS, status do orçamento e período de entrada.
 O relatório mostra os totais, pode ser impresso e, com um cliente escolhido,
 **📲 Enviar ao cliente** manda pelo WhatsApp a lista das OS dele com o status de cada uma.
+
+### Modo noturno
+Toque em **🌙** no topo para escurecer o app (e em **☀️** para voltar ao claro).
+Em **⚙️ → Aparência** dá para escolher **Automático** (segue o modo escuro do celular), **Claro** ou **Escuro**.
+A escolha fica salva em cada aparelho. Impressões e PDFs saem sempre em fundo branco.
